@@ -21,3 +21,7 @@ dependencyResolutionManagement {
 
 rootProject.name = "NeoStore"
 include(":app")
+include(":data")
+include(":domain")
+include(":presentation")
+include(":database")

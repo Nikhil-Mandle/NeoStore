@@ -2,4 +2,13 @@
 <resources>
 
     <style name="Theme.NeoStore" parent="android:Theme.Material.Light.NoActionBar" />
+
+
+    <style name="Theme.NeoStore.SplashScreen" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">@color/cardview_dark_background</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/splash_screen_image</item>
+        <item name="iconSize">22dp</item>
+        <item name="postSplashScreenTheme">@style/Theme.NeoStore</item>
+    </style>
+
 </resources>
