@@ -1,11 +1,11 @@
 package com.nikhilproject.domain.repository
 
-import com.nikhilproject.database.entity.AddressEntity
+import com.nikhilproject.domain.model.addressmodel.Address
 import kotlinx.coroutines.flow.Flow
 
 interface AddressRepository {
-    suspend fun addAddress(address: AddressEntity)
-    suspend fun updateAddress(address: AddressEntity)
-    suspend fun deleteAddress(address: AddressEntity)
-    fun getAllAddresses(): Flow<List<AddressEntity>>
+    suspend fun addAddress(address: Address)
+    suspend fun updateAddress(address: Address)
+    suspend fun deleteAddress(address: Address)
+    fun getAllAddresses(): Flow<List<Address>>
 }

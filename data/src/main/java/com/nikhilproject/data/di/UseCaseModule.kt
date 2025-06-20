@@ -1,5 +1,6 @@
 package com.nikhilproject.data.di
 
+import com.nikhilproject.domain.repository.AddressRepository
 import com.nikhilproject.domain.repository.CartRepository
 import com.nikhilproject.domain.repository.OrderRepository
 import com.nikhilproject.domain.repository.ProductRepository
@@ -20,6 +21,10 @@ import com.nikhilproject.domain.usecase.OrderProductUseCase
 import com.nikhilproject.domain.usecase.RegisterUserUseCase
 import com.nikhilproject.domain.usecase.SetProductRatingUseCase
 import com.nikhilproject.domain.usecase.UpdateProfileUseCase
+import com.nikhilproject.domain.usecase.addressusecase.AddAddressUseCase
+import com.nikhilproject.domain.usecase.addressusecase.DeleteAddressUseCase
+import com.nikhilproject.domain.usecase.addressusecase.GetAllAddressesUseCase
+import com.nikhilproject.domain.usecase.addressusecase.UpdateAddressUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -140,4 +145,33 @@ object UseCaseModule {
     ): DeleteCartItemUseCase {
         return DeleteCartItemUseCase(cartRepository)
     }
+
+    @Provides
+    fun provideGetAllAddressesUseCase(
+        addressRepository: AddressRepository
+    ): GetAllAddressesUseCase {
+        return GetAllAddressesUseCase(addressRepository)
+    }
+
+    @Provides
+    fun provideAddAddressUseCase(
+        addressRepository: AddressRepository
+    ): AddAddressUseCase {
+        return AddAddressUseCase(addressRepository)
+    }
+
+    @Provides
+    fun provideUpdateAddressUseCase(
+        addressRepository: AddressRepository
+    ): UpdateAddressUseCase {
+        return UpdateAddressUseCase(addressRepository)
+    }
+
+    @Provides
+    fun provideDeleteAddressUseCase(
+        addressRepository: AddressRepository
+    ): DeleteAddressUseCase {
+        return DeleteAddressUseCase(addressRepository)
+    }
+
 }
