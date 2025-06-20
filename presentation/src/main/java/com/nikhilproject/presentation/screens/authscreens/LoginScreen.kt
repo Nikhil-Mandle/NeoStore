@@ -1,4 +1,4 @@
-package com.nikhilproject.presentation.screens
+package com.nikhilproject.presentation.screens.authscreens
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -39,7 +39,6 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.google.android.material.progressindicator.CircularProgressIndicator
 import com.nikhilproject.domain.model.LogInRequest
 import com.nikhilproject.presentation.UiState
 import com.nikhilproject.presentation.viewmodel.AuthViewModel

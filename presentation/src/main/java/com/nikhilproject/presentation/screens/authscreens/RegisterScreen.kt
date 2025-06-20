@@ -1,4 +1,4 @@
-package com.nikhilproject.presentation.screens
+package com.nikhilproject.presentation.screens.authscreens
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box

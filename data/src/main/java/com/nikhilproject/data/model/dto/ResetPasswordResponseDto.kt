@@ -1,6 +1,7 @@
 package com.nikhilproject.data.model.dto
 
 import com.google.gson.annotations.SerializedName
+import com.nikhilproject.domain.model.ResetPasswordResponse
 
 data class ResetPasswordResponseDto(
     @SerializedName("data")
@@ -11,4 +12,11 @@ data class ResetPasswordResponseDto(
     val status: Int,
     @SerializedName("user_msg")
     val user_msg: String
-)
+) {
+    fun toDomain() = ResetPasswordResponse(
+        data = data,
+        message = message,
+        status = status,
+        user_msg = user_msg
+    )
+}

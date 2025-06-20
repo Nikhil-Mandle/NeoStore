@@ -42,6 +42,4 @@ abstract class RepositoryModule {
         impl: OrderRepositoryImpl
     ): OrderRepository
 
-
-
 }

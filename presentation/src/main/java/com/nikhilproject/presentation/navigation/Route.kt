@@ -1,20 +1,5 @@
 package com.nikhilproject.presentation.navigation
 
-/*sealed class RootRoute(val route: String) {
-    object Auth : RootRoute("auth_graph")
-    object Main : RootRoute("main_graph")
-}
-
-sealed class AuthRoute(val route: String) {
-    object Register : AuthRoute("register")
-}
-
-sealed class MainRoute(val route: String) {
-    object Home : MainRoute("home/{firstName}") {
-        fun createRoute(firstName: String) = "home/$firstName"
-    }
-}*/
-
 //@Serializable data object AuthGraph
 //@Serializable data object LoginRoute
 //@Serializable data object RegisterRoute

@@ -28,7 +28,6 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.nikhilproject.presentation.navigation.AppNavHost
 import com.nikhilproject.presentation.navigation.Routes
-import com.nikhilproject.presentation.screens.LoginScreen
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

@@ -9,10 +9,10 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import com.nikhilproject.presentation.screens.AppSettingsScreen
 import com.nikhilproject.presentation.screens.HomeScreen
-import com.nikhilproject.presentation.screens.LoginScreen
+import com.nikhilproject.presentation.screens.authscreens.LoginScreen
 import com.nikhilproject.presentation.screens.ProductDetailScreen
 import com.nikhilproject.presentation.screens.ProductListScreen
-import com.nikhilproject.presentation.screens.RegisterScreen
+import com.nikhilproject.presentation.screens.authscreens.RegisterScreen
 import com.nikhilproject.presentation.screens.UpdateProfileScreen
 
 @Composable
