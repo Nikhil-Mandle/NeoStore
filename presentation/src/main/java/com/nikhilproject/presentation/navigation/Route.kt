@@ -1,38 +1,52 @@
 package com.nikhilproject.presentation.navigation
 
-//@Serializable data object AuthGraph
-//@Serializable data object LoginRoute
-//@Serializable data object RegisterRoute
-//
-//@Serializable data object HomeGraph
-//@Serializable data object ProductListRoute
-//@Serializable data object ProductDetailRoute
-//
-//@Serializable data object ProfileGraph
-//@Serializable data object ProfileRoute
-//@Serializable data object UpdateProfileRoute
-//
-//@Serializable data object SettingsGraph
-//@Serializable data object SettingsRoute
-//@Serializable data object AppSettingsRoute
+import kotlinx.serialization.Serializable
 
+@Serializable
+data object AuthGraph
 
-object Routes {
-    const val AUTH_GRAPH = "auth_graph"
-    const val LOGIN = "login"
-    const val REGISTER = "register"
+@Serializable
+data object LoginScreen
 
-    const val HOME_GRAPH = "home_graph"
-    const val HOME_SCREEN = "home_screen"
+@Serializable
+data object RegisterScreen
 
-    const val PRODUCT_GRAPH = "product_graph"
-    const val PRODUCT_DETAIL = "product_detail"
-    const val PRODUCT_LIST = "product_list"
+@Serializable
+data object HomeGraph
 
-    const val PROFILE_GRAPH = "profile_graph"
-    const val UPDATE_PROFILE = "update_profile"
+@Serializable
+data object HomeScreen
 
-    const val SETTINGS_GRAPH = "settings_graph"
-    const val APP_SETTINGS = "app_settings"
-}
+@Serializable
+data object ProductGraph
+
+@Serializable
+data object ProductListScreen
+
+@Serializable
+data class ProductDetailScreenNav(val productId: Int)
+
+@Serializable
+data object ProfileGraph
+
+@Serializable
+data object UpdateProfileScreen
+
+@Serializable
+data object SettingsGraph
+
+@Serializable
+data object AppSettingsScreen
+
+@Serializable
+data object CartGraph
+
+@Serializable
+data object CartScreen
+
+@Serializable
+data object OrdersGraph
+
+@Serializable
+data object OrdersScreen
 

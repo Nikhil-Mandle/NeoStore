@@ -60,9 +60,9 @@ class ProductViewModel @Inject constructor(
     fun setProductRating(productId: Int, rating: Int) = viewModelScope.launch {
         _setRatingState.value = UiState.Loading
         runCatching {
-            setProductRatingUseCase(productId, rating).message
+            setProductRatingUseCase(productId, rating)
         }.onSuccess {
-            _setRatingState.value = UiState.Success(it)
+            _setRatingState.value = UiState.Success(it.message)
         }.onFailure {
             _setRatingState.value = UiState.Error(it.message ?: "Failed to set rating")
         }

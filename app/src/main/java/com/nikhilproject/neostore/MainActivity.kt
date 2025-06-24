@@ -27,7 +27,11 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.nikhilproject.presentation.navigation.AppNavHost
-import com.nikhilproject.presentation.navigation.Routes
+import com.nikhilproject.presentation.navigation.AppSettingsScreen
+import com.nikhilproject.presentation.navigation.HomeScreen
+import com.nikhilproject.presentation.navigation.ProductDetailScreenNav
+import com.nikhilproject.presentation.navigation.ProductListScreen
+import com.nikhilproject.presentation.navigation.UpdateProfileScreen
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -39,23 +43,21 @@ class MainActivity : ComponentActivity() {
         setContent {
 
             val navController = rememberNavController()
-            AppScaffold(navController = navController)
-
-
+            NeoStoreApp(navController = navController)
 
         }
     }
 }
 
 @Composable
-fun AppScaffold(navController: NavHostController) {
+fun NeoStoreApp(navController: NavHostController) {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
 
     Scaffold(
         topBar = {
             when (currentRoute) {
-                Routes.HOME_SCREEN -> {
+                HomeScreen::class.qualifiedName -> {
                     TopBar(
                         title = "NeoSTORE",
                         showBackButton = false,
@@ -63,7 +65,7 @@ fun AppScaffold(navController: NavHostController) {
                     )
                 }
 
-                Routes.PRODUCT_LIST -> {
+                ProductListScreen::class.qualifiedName -> {
                     TopBar(
                         title = "Products",
                         showBackButton = true,
@@ -71,28 +73,28 @@ fun AppScaffold(navController: NavHostController) {
                     )
                 }
 
-                Routes.PRODUCT_DETAIL -> {
+                ProductDetailScreenNav::class.qualifiedName -> {
                     TopBar(
                         title = "Product Detail",
                         showBackButton = true,
                         navController = navController
                     )
                 }
-                Routes.UPDATE_PROFILE -> {
+                UpdateProfileScreen::class.qualifiedName -> {
                     TopBar(
                         title = "Update Profile",
                         showBackButton = true,
                         navController = navController
                     )
                 }
-                Routes.APP_SETTINGS -> {
+                AppSettingsScreen::class.qualifiedName -> {
                     TopBar(
                         title = "Settings",
                         showBackButton = true,
                         navController = navController
                     )
                 }
-                else -> {} // No top bar for unknown or splash routes
+                else -> {}
             }
         }
     ) { innerPadding ->
@@ -114,13 +116,13 @@ fun TopBar(
         title = { Text(text = title, textAlign = TextAlign.Center) },
         navigationIcon = {
             if (showBackButton) {
-                    IconButton(onClick = { navController.popBackStack() }) {
-                        Icon(Icons.Default.ArrowBack, contentDescription = "Back")
-                    }
+                IconButton(onClick = { navController.popBackStack() }) {
+                    Icon(Icons.Default.ArrowBack, contentDescription = "Back")
+                }
 
             } else {
                 IconButton(onClick = {
-                    navController.navigate(Routes.APP_SETTINGS)
+
                 }) {
                     Icon(Icons.Default.Menu, contentDescription = "Back")
                 }

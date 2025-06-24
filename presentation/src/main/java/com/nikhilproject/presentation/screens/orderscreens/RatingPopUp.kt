@@ -1,12 +1,10 @@
 package com.nikhilproject.presentation.screens.orderscreens
 
-import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -15,6 +13,7 @@ import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Star
+import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material.icons.outlined.Star
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -25,6 +24,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -46,6 +46,8 @@ fun ProductRatingDialog(
     onSubmit: (Int) -> Unit
 ) {
     if (showDialog) {
+        var rating by remember { mutableIntStateOf(0) }
+
         Dialog(onDismissRequest = onDismiss) {
             Card(
                 shape = RoundedCornerShape(12.dp),
@@ -61,15 +63,16 @@ fun ProductRatingDialog(
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Text(
-                        text = "6 Seater Dining Table",
-                        style = MaterialTheme.typography.bodySmall,
+                        text = "Rate this product",
+                        style = MaterialTheme.typography.bodyMedium,
                         textAlign = TextAlign.Center,
                         modifier = Modifier.padding(bottom = 16.dp)
                     )
 
+                    // Optional product image
                     Image(
-                        painter = painterResource(id = R.drawable.table), // replace with your image
-                        contentDescription = "Dining Table",
+                        painter = painterResource(id = R.drawable.table),
+                        contentDescription = "Product Image",
                         contentScale = ContentScale.Fit,
                         modifier = Modifier
                             .size(200.dp)
@@ -77,11 +80,7 @@ fun ProductRatingDialog(
                     )
 
                     // Rating Bar
-                    Text(text = "Rate this product", modifier = Modifier.padding(bottom = 8.dp))
-
-                    var rating by remember { mutableStateOf(4) }  // initial rating
-
-                    Row (
+                    Row(
                         horizontalArrangement = Arrangement.Center,
                         modifier = Modifier.padding(bottom = 16.dp)
                     ) {
@@ -89,7 +88,7 @@ fun ProductRatingDialog(
                             Icon(
                                 imageVector = if (i <= rating) Icons.Filled.Star else Icons.Outlined.Star,
                                 contentDescription = "Star $i",
-                                tint = Color(0xFFFFC107),
+                                tint = if (i <= rating) Color(0xFFFFC107) else Color.LightGray,
                                 modifier = Modifier
                                     .size(40.dp)
                                     .clickable { rating = i }
@@ -113,29 +112,6 @@ fun ProductRatingDialog(
             }
         }
     }
-}
-
-@Composable
-fun RatingScreen() {
-    var showDialog by remember { mutableStateOf(false) }
-
-    Column(
-        modifier = Modifier.fillMaxSize(),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
-    ) {
-        Button(onClick = { showDialog = true }) {
-            Text("Rate Product")
-        }
-    }
-
-    ProductRatingDialog(
-        showDialog = showDialog,
-        onDismiss = { showDialog = false },
-        onSubmit = { rating ->
-            Log.d("ProductScreen", "User rated: $rating stars")
-        }
-    )
 }
 
 

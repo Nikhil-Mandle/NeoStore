@@ -49,7 +49,7 @@ import com.nikhilproject.presentation.viewmodel.HomeScreenViewModel
 @Composable
 fun HomeScreen(
     homeScreenViewModel: HomeScreenViewModel = hiltViewModel(),
-    OnItemClick: () -> Unit,
+    onItemClick: () -> Unit,
 ) {
     val authViewModel = hiltViewModel<AuthViewModel>()
     val token = authViewModel.getAccessToken()
@@ -110,7 +110,7 @@ fun HomeScreen(
                                 bgColor = Color.Red
                             )
                         ){
-                            OnItemClick()
+                            onItemClick()
                         }
                     }
                 }
@@ -126,7 +126,6 @@ fun HomeScreen(
         UiState.Idle -> {}
     }
 }
-
 
 @Composable
 fun CategoryCard(category: Category, onClick: () -> Unit) {
