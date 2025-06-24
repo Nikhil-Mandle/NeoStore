@@ -12,9 +12,17 @@ import com.nikhilproject.presentation.screens.AppSettingsScreen
 import com.nikhilproject.presentation.screens.HomeScreen
 import com.nikhilproject.presentation.screens.ProductDetailScreen
 import com.nikhilproject.presentation.screens.ProductListScreen
-import com.nikhilproject.presentation.screens.UpdateProfileScreen
+import com.nikhilproject.presentation.screens.StoreLocatorScreen
+import com.nikhilproject.presentation.screens.accountsscreen.EditProfileScreen
+import com.nikhilproject.presentation.screens.accountsscreen.MyAccountScreen
+import com.nikhilproject.presentation.screens.accountsscreen.ResetPasswordScreen
 import com.nikhilproject.presentation.screens.authscreens.LoginScreen
 import com.nikhilproject.presentation.screens.authscreens.RegisterScreen
+import com.nikhilproject.presentation.screens.cartscreens.AddressListScreen
+import com.nikhilproject.presentation.screens.cartscreens.MyCartScreen
+import com.nikhilproject.presentation.screens.orderscreens.MyOrdersList
+import com.nikhilproject.presentation.screens.orderscreens.OrderDetailsScreen
+import com.nikhilproject.presentation.screens.orderscreens.orderItems
 
 @Composable
 fun AppNavHost(navController: NavHostController, modifier: Modifier) {
@@ -26,8 +34,12 @@ fun AppNavHost(navController: NavHostController, modifier: Modifier) {
         authGraph(navController)
         homeGraph(navController)
         productGraph(navController)
-        updateProfileGraph(navController)
+        profileGraph(navController)
         appSettingsGraph(navController)
+        cartGraph(navController)
+        addressGraph(navController)
+        ordersGraph(navController)
+        storeLocatorGraph(navController)
     }
 }
 
@@ -88,13 +100,22 @@ fun NavGraphBuilder.productGraph(navController: NavHostController) {
     }
 }
 
-fun NavGraphBuilder.updateProfileGraph(navController: NavHostController) {
+fun NavGraphBuilder.profileGraph(navController: NavHostController) {
 
     navigation<ProfileGraph>(
-        startDestination = UpdateProfileScreen,
+        startDestination = ResetPasswordScreen,
     ) {
-        composable<UpdateProfileScreen> {
-            UpdateProfileScreen()
+
+        composable<MyAccountScreen> {
+            MyAccountScreen()
+        }
+
+        composable<EditProfileScreen> {
+            EditProfileScreen()
+        }
+
+        composable<ResetPasswordScreen> {
+            ResetPasswordScreen()
         }
     }
 }
@@ -111,20 +132,48 @@ fun NavGraphBuilder.appSettingsGraph(navController: NavHostController) {
 
 fun NavGraphBuilder.cartGraph(navController: NavHostController) {
     navigation<CartGraph>(
-        startDestination = CartScreen,
+        startDestination = MyCartScreen,
     ) {
-        composable<CartScreen> {
-            AppSettingsScreen()
+        composable<MyCartScreen> {
+            MyCartScreen(){
+                navController.navigate(AddressGraph)
+            }
+        }
+    }
+}
+
+fun NavGraphBuilder.addressGraph(navController: NavHostController) {
+    navigation<AddressGraph>(
+        startDestination = AddressListScreen,
+    ) {
+        composable<AddressListScreen> {
+            AddressListScreen()
+        }
+
+        composable<AddAddressScreen> {
+            AddressListScreen()
         }
     }
 }
 
 fun NavGraphBuilder.ordersGraph(navController: NavHostController) {
     navigation<OrdersGraph>(
-        startDestination = OrdersScreen,
+        startDestination = MyOrdersListScreen,
     ) {
-        composable<OrdersScreen> {
-            AppSettingsScreen()
+        composable<MyOrdersListScreen> {
+            MyOrdersList(){
+                navController.navigate(MyOrdersListScreen)
+            }
         }
+
+        composable<MyOrdersListScreen> {
+            OrderDetailsScreen(orderItems)
+        }
+    }
+}
+
+fun NavGraphBuilder.storeLocatorGraph(navController: NavHostController) {
+    composable<StoreLocatorScreen> {
+        StoreLocatorScreen()
     }
 }

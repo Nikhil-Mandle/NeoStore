@@ -43,7 +43,7 @@ import androidx.compose.ui.unit.dp
 import com.nikhilproject.presentation.R
 
 @Composable
-fun MyCartScreen() {
+fun MyCartScreen(onOrderNowClicked: () -> Unit) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -75,7 +75,9 @@ fun MyCartScreen() {
         }
 
         Button(
-            onClick = {},
+            onClick = {
+                onOrderNowClicked()
+            },
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(16.dp)
@@ -152,5 +154,5 @@ data class CartItem(
 @Preview
 @Composable
 fun MyCartScreenPreview(){
-    MyCartScreen()
+    MyCartScreen(){}
 }

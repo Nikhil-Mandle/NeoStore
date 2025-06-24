@@ -30,7 +30,13 @@ data class ProductDetailScreenNav(val productId: Int)
 data object ProfileGraph
 
 @Serializable
-data object UpdateProfileScreen
+data object EditProfileScreen
+
+@Serializable
+data object MyAccountScreen
+
+@Serializable
+data object ResetPasswordScreen
 
 @Serializable
 data object SettingsGraph
@@ -42,11 +48,23 @@ data object AppSettingsScreen
 data object CartGraph
 
 @Serializable
-data object CartScreen
+data object MyCartScreen
 
 @Serializable
 data object OrdersGraph
 
 @Serializable
-data object OrdersScreen
+data object MyOrdersListScreen
+
+@Serializable
+data object StoreLocatorScreen
+
+@Serializable
+data object AddressGraph
+
+@Serializable
+data object AddressListScreen
+
+@Serializable
+data object AddAddressScreen
 

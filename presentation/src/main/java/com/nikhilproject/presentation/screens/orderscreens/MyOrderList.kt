@@ -1,6 +1,7 @@
 package com.nikhilproject.presentation.screens.orderscreens
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -12,6 +13,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Divider
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -22,7 +24,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun MyOrdersList() {
+fun MyOrdersList(onItemClick: () -> Unit) {
     val orders = listOf(
         Order("15879", "07 Aug' 15", "₹45.00"),
         Order("17846", "08 Aug' 15", "₹90.00"),
@@ -38,18 +40,23 @@ fun MyOrdersList() {
             .background(Color.White)
     ) {
         items(orders) { order ->
-            OrderItem(order)
-            Divider(color = Color.LightGray, thickness = 1.dp)
+            OrderItem(order){
+                onItemClick.invoke()
+            }
+            HorizontalDivider(color = Color.LightGray, thickness = 1.dp)
         }
     }
 }
 
 @Composable
-fun OrderItem(order: Order) {
+fun OrderItem(order: Order, onItemClick: () -> Unit) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
             .padding(16.dp)
+            .clickable {
+
+            }
     ) {
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -84,5 +91,5 @@ data class Order(
 @Preview
 @Composable
 private fun MyOrdersListPreview() {
-    MyOrdersList()
+    MyOrdersList(){}
 }

@@ -116,14 +116,17 @@ data class OrderItem(
 
 @Composable
 fun SampleOrderDetailsScreen() {
-    val orderItems = listOf(
-        OrderItem("Pembroke", "Table", 3, 45.00, R.drawable.table),
-        OrderItem("Adirondack", "Chair", 5, 90.00, R.drawable.chair),
-        OrderItem("Chesterfield", "Sofa", 4, 45.00, R.drawable.sofa)
-    )
+
 
     OrderDetailsScreen(orderItems = orderItems)
 }
+
+val orderItems = listOf(
+    OrderItem("Pembroke", "Table", 3, 45.00, R.drawable.table),
+    OrderItem("Adirondack", "Chair", 5, 90.00, R.drawable.chair),
+    OrderItem("Chesterfield", "Sofa", 4, 45.00, R.drawable.sofa)
+)
+
 
 
 @Preview

@@ -38,7 +38,7 @@ import androidx.compose.ui.unit.dp
 import com.nikhilproject.presentation.R
 
 @Composable
-fun EditAccountScreen() {
+fun MyAccountScreen() {
     var firstName by remember { mutableStateOf("Sagar") }
     var lastName by remember { mutableStateOf("Shinde") }
     var email by remember { mutableStateOf("sagarshinde@wwindia.com") }
@@ -151,5 +151,5 @@ fun CustomOutlinedTextField(
 @Preview
 @Composable
 private fun EditAccountScreenPreview() {
-    EditAccountScreen()
+    MyAccountScreen()
 }
