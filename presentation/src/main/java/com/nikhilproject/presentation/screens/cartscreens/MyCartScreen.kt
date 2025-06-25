@@ -47,6 +47,8 @@ import coil.compose.rememberAsyncImagePainter
 import com.nikhilproject.domain.model.CartListResponse
 import com.nikhilproject.domain.model.ProductItemData
 import com.nikhilproject.presentation.UiState
+import com.nikhilproject.presentation.screens.components.ShowProgressDialog
+import com.nikhilproject.presentation.screens.components.ShowToastMessage
 import com.nikhilproject.presentation.viewmodel.CartViewModel
 import com.nikhilproject.presentation.viewmodel.UserViewModel
 
@@ -58,10 +60,38 @@ fun MyCartScreen(onOrderNowClicked: () -> Unit) {
 
     val accessToken = userViewModel.getAccessToken()
     val cartState by cartViewModel.cartListState.collectAsState()
+    val deleteCartState by cartViewModel.deleteCartState.collectAsState()
 
+    var showLoading by remember { mutableStateOf(false) }
+    var messageToShow by remember { mutableStateOf<String?>(null) }
 
     LaunchedEffect(Unit) {
         cartViewModel.fetchCartItems(accessToken ?: "")
+    }
+
+    LaunchedEffect(deleteCartState) {
+        when (val state = deleteCartState) {
+            is UiState.Loading -> showLoading = true
+
+            is UiState.Success -> {
+                showLoading = false
+                messageToShow = state.data.message
+                cartViewModel.fetchCartItems(accessToken ?: "")
+            }
+
+            is UiState.Error -> {
+                showLoading = false
+                messageToShow = state.message
+            }
+
+            else -> Unit
+        }
+    }
+
+    ShowProgressDialog(showLoading)
+
+    ShowToastMessage(messageToShow) {
+        messageToShow = it
     }
 
     when (cartState) {
@@ -82,7 +112,12 @@ fun MyCartScreen(onOrderNowClicked: () -> Unit) {
             ) {
                 LazyColumn(modifier = Modifier.weight(1f)) {
                     items(cartItems) { item ->
-                        CartItemRow(item)
+                        CartItemRow(item) {
+                            cartViewModel.deleteCartItem(
+                                accessToken = accessToken ?: "",
+                                productId = it
+                            )
+                        }
                     }
                 }
 
@@ -112,17 +147,17 @@ fun MyCartScreen(onOrderNowClicked: () -> Unit) {
         }
 
         is UiState.Error -> {
-            Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                Text("Error: ${(cartState as UiState.Error).message}", color = Color.Red)
+            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                Text("No items in the cart", style = MaterialTheme.typography.bodyLarge)
             }
         }
 
-        UiState.Idle -> {} // No-op
+        UiState.Idle -> {}
     }
 }
 
 @Composable
-fun CartItemRow(item: ProductItemData) {
+fun CartItemRow(item: ProductItemData, onRemoveFromCartClicked: (Int) -> Unit) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -142,11 +177,13 @@ fun CartItemRow(item: ProductItemData) {
         Column(modifier = Modifier.weight(1f)) {
             Text(item.product.name, fontWeight = FontWeight.Bold)
             Text("(${item.product.product_category})", style = MaterialTheme.typography.bodySmall)
-            QuantitySelector()
+            QuantitySelector(item.quantity)
         }
 
         Column(horizontalAlignment = Alignment.End) {
-            IconButton(onClick = {}) {
+            IconButton(onClick = {
+                onRemoveFromCartClicked(item.product.id)
+            }) {
                 Icon(
                     imageVector = Icons.Default.Delete,
                     contentDescription = "Delete",
@@ -160,8 +197,8 @@ fun CartItemRow(item: ProductItemData) {
 }
 
 @Composable
-fun QuantitySelector() {
-    var quantity by remember { mutableStateOf(1) }
+fun QuantitySelector(selectedQuantity: Int) {
+    var quantity by remember { mutableStateOf(selectedQuantity) }
     Row(
         verticalAlignment = Alignment.CenterVertically
     ) {

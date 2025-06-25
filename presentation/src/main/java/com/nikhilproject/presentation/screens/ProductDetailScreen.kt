@@ -31,7 +31,6 @@ fun ProductDetailScreen(
     val ratingState by viewModel.setRatingState.collectAsStateWithLifecycle()
     val addToCartState by cartViewModel.addToCartState.collectAsStateWithLifecycle()
 
-
     var showRatingDialog by remember { mutableStateOf(false) }
     var showQuantityDialog by remember { mutableStateOf(false) }
 
@@ -41,7 +40,6 @@ fun ProductDetailScreen(
     LaunchedEffect(productId) {
         viewModel.fetchProductDetails(productId)
     }
-
 
     LaunchedEffect(addToCartState) {
         when (addToCartState) {
@@ -62,8 +60,6 @@ fun ProductDetailScreen(
             UiState.Idle -> Unit
         }
     }
-
-
 
     LaunchedEffect(ratingState) {
         when (ratingState) {

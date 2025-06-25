@@ -41,6 +41,8 @@ class UserViewModel @Inject constructor(
         runCatching { registerUseCase(req) }
             .onSuccess { user ->
                 tokenManager.addAccessToken(user.accessToken)
+                tokenManager.saveUserName(user.firstName + " " + user.lastName)
+                tokenManager.saveUserEmail(user.email)
                 _uiState.value = UiState.Success(user)
             }
             .onFailure { ex ->
@@ -54,6 +56,8 @@ class UserViewModel @Inject constructor(
         runCatching { loginUseCase(req) }
             .onSuccess { user ->
                 tokenManager.addAccessToken(user.accessToken)
+                tokenManager.saveUserName(user.firstName + " " + user.lastName)
+                tokenManager.saveUserEmail(user.email)
                 _uiState.value = UiState.Success(user)
             }
             .onFailure { ex ->
@@ -112,5 +116,11 @@ class UserViewModel @Inject constructor(
 
 
     fun getAccessToken() = tokenManager.getAccessToken()
+
+    fun getUserName() = tokenManager.getUserName()
+
+    fun getUserEmail() = tokenManager.getUserEmail()
+
+    fun getProfilePic() = tokenManager.getProfilePic()
 
 }

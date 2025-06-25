@@ -10,9 +10,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.nikhilproject.presentation.screens.components.DrawerContent
+import com.nikhilproject.presentation.viewmodel.UserViewModel
 
 @Composable
 fun NeoStoreApp() {
@@ -22,19 +24,9 @@ fun NeoStoreApp() {
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()
     val topBarConfig = getTopBarConfig(currentRoute, navController, drawerState, scope)
+    val userViewModel: UserViewModel = hiltViewModel()
 
-    ModalNavigationDrawer(
-        drawerContent = {
-            ModalDrawerSheet {
-                DrawerContent(
-                    navController = navController,
-                    drawerState = drawerState,
-                    scope = scope
-                )
-            }
-        },
-        drawerState = drawerState
-    ) {
+    val content: @Composable () -> Unit = {
         Scaffold(
             topBar = {
                 topBarConfig?.let { config ->
@@ -50,11 +42,33 @@ fun NeoStoreApp() {
                     ) {
                         config.onNavigationClick?.invoke()
                     }
-
                 }
             }
         ) { innerPadding ->
             AppNavHost(navController = navController, modifier = Modifier.padding(innerPadding))
         }
     }
+
+    if (currentRoute == HomeScreen::class.qualifiedName) {
+        ModalNavigationDrawer(
+            drawerContent = {
+                ModalDrawerSheet {
+                    DrawerContent(
+                        navController = navController,
+                        drawerState = drawerState,
+                        scope = scope,
+                        userName = userViewModel.getUserName() ?: "",
+                        userEmail = userViewModel.getUserEmail() ?: "",
+                        profilePic = userViewModel.getProfilePic() ?: "",
+                    )
+                }
+            },
+            drawerState = drawerState
+        ) {
+            content()
+        }
+    } else {
+        content()
+    }
 }
+

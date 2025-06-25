@@ -33,7 +33,7 @@ class AddressViewModel @Inject constructor(
     val updateAddressState = _updateAddressState.asStateFlow()
 
     // Delete Address State
-    private val _deleteAddressState = MutableStateFlow<UiState<Unit>>(UiState.Idle)
+    private val _deleteAddressState = MutableStateFlow<UiState<String>>(UiState.Idle)
     val deleteAddressState = _deleteAddressState.asStateFlow()
 
     fun addAddress(address: Address) = viewModelScope.launch {
@@ -63,7 +63,7 @@ class AddressViewModel @Inject constructor(
         runCatching {
             deleteAddressUseCase(address)
         }.onSuccess {
-            _deleteAddressState.value = UiState.Success(Unit)
+            _deleteAddressState.value = UiState.Success("Address deleted successfully")
         }.onFailure { e ->
             _deleteAddressState.value = UiState.Error(e.message ?: "Unknown error")
         }

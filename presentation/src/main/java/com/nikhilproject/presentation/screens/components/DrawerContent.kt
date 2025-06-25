@@ -24,6 +24,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import coil.compose.rememberAsyncImagePainter
 import com.nikhilproject.presentation.R
 import com.nikhilproject.presentation.navigation.LoginScreen
 import com.nikhilproject.presentation.navigation.MyAccountScreen
@@ -39,9 +40,10 @@ fun DrawerContent(
     navController: NavHostController,
     drawerState: DrawerState,
     scope: CoroutineScope,
-    userName: String = "Kinjal Jain",
-    userEmail: String = "kinjal.jain@wwindia.com",
-    cartCount: Int = 2
+    userName: String,
+    userEmail: String,
+    profilePic: String,
+    cartCount: Int = 0
 ) {
     Column(
         modifier = Modifier
@@ -57,7 +59,7 @@ fun DrawerContent(
                 .align(Alignment.CenterHorizontally)
         ) {
             Image(
-                painter = painterResource(id = R.drawable.closet),
+                painter = rememberAsyncImagePainter(profilePic),
                 contentDescription = "Profile",
                 modifier = Modifier.fillMaxSize(),
                 contentScale = ContentScale.Crop
@@ -85,7 +87,6 @@ fun DrawerContent(
         DrawerItem(
             icon = R.drawable.shopping_cart,
             label = "My Cart",
-            badgeCount = cartCount
         ) {
             scope.launch { drawerState.close() }
             navController.navigate(MyCartScreen)

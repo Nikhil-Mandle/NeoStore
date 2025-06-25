@@ -154,7 +154,11 @@ fun NavGraphBuilder.addressGraph(navController: NavHostController) {
     ) {
         composable<AddressListScreen> {
             AddressListScreen() {
-                navController.navigate(OrdersGraph)
+                navController.navigate(OrdersGraph) {
+                    popUpTo(HomeGraph) {
+                        inclusive = true
+                    }
+                }
             }
         }
 
@@ -186,3 +190,4 @@ fun NavGraphBuilder.storeLocatorGraph(navController: NavHostController) {
         StoreLocatorScreen()
     }
 }
+

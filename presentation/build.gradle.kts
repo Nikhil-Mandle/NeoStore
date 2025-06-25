@@ -87,4 +87,9 @@ dependencies {
 
     implementation(libs.coil.compose)
 
+    // Google Maps SDK for Android (required)
+    implementation("com.google.android.gms:play-services-maps:18.2.0")
+
+    // Jetpack Compose Maps integration (required for GoogleMap composable)
+    implementation("com.google.maps.android:maps-compose:2.11.4")
 }

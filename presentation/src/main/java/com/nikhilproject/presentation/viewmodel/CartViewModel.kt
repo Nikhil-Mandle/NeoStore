@@ -76,7 +76,7 @@ class CartViewModel @Inject constructor(
         }.onSuccess { response ->
             _cartListState.value = UiState.Success(response)
         }.onFailure { throwable ->
-            _cartListState.value = UiState.Error(throwable.message ?: "Unknown error")
+            _cartListState.value = UiState.Error("No items in the cart")
         }
     }
 }
