@@ -5,19 +5,20 @@ import com.nikhilproject.domain.model.addressmodel.Address
 
 fun AddressEntity.toDomain() = Address(
     id = id,
-    name = name,
-    street = street,
+    address = address,
+    landmark = landmark,
     city = city,
     state = state,
-    zip = zip
+    zipCode = zipCode,
+    country = country
 )
-
 
 fun Address.toEntity() = AddressEntity(
     id = id,
-    name = name,
-    street = street,
+    address = address,
+    landmark = landmark,
     city = city,
     state = state,
-    zip = zip
+    zipCode = zipCode,
+    country = country
 )

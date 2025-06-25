@@ -1,6 +1,6 @@
 package com.nikhilproject.domain.usecase
 
-import com.nikhilproject.domain.model.User
+import com.nikhilproject.domain.model.UpdateProfileResponse
 import com.nikhilproject.domain.repository.UserRepository
 
 class UpdateProfileUseCase(
@@ -14,7 +14,7 @@ class UpdateProfileUseCase(
         dob: String,
         phoneNo: String,
         profilePic: String
-    ): User {
+    ): UpdateProfileResponse {
         return repository.updateUserProfile(
             token = token,
             firstName = firstName,

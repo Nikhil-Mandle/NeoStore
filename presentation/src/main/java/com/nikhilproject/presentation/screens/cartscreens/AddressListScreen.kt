@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.Button
@@ -22,15 +23,24 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import com.nikhilproject.presentation.viewmodel.AddressViewModel
 
 @Composable
-fun AddressListScreen() {
+fun AddressListScreen(
+    viewModel: AddressViewModel = hiltViewModel(),
+    onPlaceOrderClick: () -> Unit
+) {
+    val addresses by viewModel.allAddresses.collectAsState()
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -42,30 +52,32 @@ fun AddressListScreen() {
             modifier = Modifier.padding(bottom = 16.dp)
         )
 
-        LazyColumn(
-            modifier = Modifier.weight(1f)
-        ) {
-            items(3) { index ->  // Assuming 3 addresses for now
-                AddressCard(
-                    name = "Glen Dmello",
-                    address = "NeoSOFT Technologies 4th Floor, The Ruby,\n" +
-                            "29, Senapati Bapat Marg, Dadar (West)\n" +
-                            "Mumbai- 400-028.INDIA.",
-                    isSelected = index == 0  // First item selected by default
-                )
-                Spacer(modifier = Modifier.height(12.dp))
+        if (addresses.isEmpty()) {
+            Text("No addresses found. Please add one.")
+        } else {
+            LazyColumn(modifier = Modifier.weight(1f)) {
+                items(addresses) { address ->
+                    AddressCard(
+                        name = "Need to add name",
+                        address = "${address.address}, ${address.city}, ${address.state}, ${address.zipCode}",
+                        isSelected = false
+                    )
+                    Spacer(modifier = Modifier.height(12.dp))
+                }
             }
-        }
 
-        Button(
-            onClick = { /* Handle place order */ },
-            colors = ButtonDefaults.buttonColors(containerColor = Color.Red),
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(50.dp)
-                .padding(top = 16.dp)
-        ) {
-            Text(text = "PLACE ORDER", color = Color.White)
+            Button(
+                onClick = {
+                    onPlaceOrderClick()
+                },
+                colors = ButtonDefaults.buttonColors(containerColor = Color.Red),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(50.dp)
+                    .padding(top = 16.dp)
+            ) {
+                Text("PLACE ORDER", color = Color.White)
+            }
         }
     }
 }
@@ -85,7 +97,9 @@ fun AddressCard(name: String, address: String, isSelected: Boolean) {
         ) {
             RadioButton(
                 selected = isSelected,
-                onClick = { /* Handle selection */ }
+                onClick = {
+
+                }
             )
 
             Spacer(modifier = Modifier.width(8.dp))
@@ -117,5 +131,5 @@ fun AddressCard(name: String, address: String, isSelected: Boolean) {
 @Preview
 @Composable
 private fun AddressListScreenPreview() {
-    AddressListScreen()
+    AddressListScreen() {}
 }

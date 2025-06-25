@@ -30,7 +30,7 @@ data class ProductDetailScreenNav(val productId: Int)
 data object ProfileGraph
 
 @Serializable
-data object EditProfileScreen
+data class EditProfileScreenNav(val profilePicUrl: String)
 
 @Serializable
 data object MyAccountScreen
@@ -55,6 +55,9 @@ data object OrdersGraph
 
 @Serializable
 data object MyOrdersListScreen
+
+@Serializable
+data class OrderDetailScreen(val id: Int)
 
 @Serializable
 data object StoreLocatorScreen

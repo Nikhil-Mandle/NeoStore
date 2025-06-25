@@ -19,11 +19,23 @@ import androidx.compose.ui.text.style.TextAlign
 fun TopBar(
     title: String,
     navigationIcon: ImageVector? = null,
+    endIcon: ImageVector? = null,
+    onEndIconClick: () -> Unit,
     onNavigationIconClick: () -> Unit,
 ) {
     TopAppBar(
         modifier = Modifier.background(Color.Green),
         title = { Text(text = title, textAlign = TextAlign.Center) },
+        actions = {
+            IconButton(onClick = onEndIconClick) {
+                endIcon?.let {
+                    Icon(
+                        imageVector = it,
+                        contentDescription = "Add"
+                    )
+                }
+            }
+        },
         navigationIcon = {
                 IconButton(onClick = {
                     onNavigationIconClick()

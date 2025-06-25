@@ -50,11 +50,11 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.nikhilproject.domain.model.RegisterRequest
 import com.nikhilproject.presentation.UiState
-import com.nikhilproject.presentation.viewmodel.AuthViewModel
+import com.nikhilproject.presentation.viewmodel.UserViewModel
 
 @Composable
 fun RegisterScreen(
-    viewModel: AuthViewModel = hiltViewModel(),
+    viewModel: UserViewModel = hiltViewModel(),
     onSuccessNavigate: () -> Unit
 ) {
 

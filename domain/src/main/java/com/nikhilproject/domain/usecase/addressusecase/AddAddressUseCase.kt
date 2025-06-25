@@ -6,7 +6,6 @@ import com.nikhilproject.domain.repository.AddressRepository
 class AddAddressUseCase(
     private val addressRepository: AddressRepository
 ) {
-
     suspend operator fun invoke(address: Address) {
         addressRepository.addAddress(address)
     }

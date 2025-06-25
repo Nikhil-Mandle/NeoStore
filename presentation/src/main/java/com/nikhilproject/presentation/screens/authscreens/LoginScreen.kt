@@ -41,21 +41,21 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.nikhilproject.domain.model.LogInRequest
 import com.nikhilproject.presentation.UiState
-import com.nikhilproject.presentation.viewmodel.AuthViewModel
+import com.nikhilproject.presentation.viewmodel.UserViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LoginScreen(
     onLoginSuccess: () -> Unit,
     onDontHaveAnAccountClick: () -> Unit,
-    viewModel: AuthViewModel = hiltViewModel()
+    viewModel: UserViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
     var username by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
 
     username = "nikhil1@test.com"
-    password = "nikhil1234"
+    password = "Nikhil1234"
 
     // Observe success and navigate
     LaunchedEffect(uiState) {

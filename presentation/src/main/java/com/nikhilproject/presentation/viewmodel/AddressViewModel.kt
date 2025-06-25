@@ -26,7 +26,7 @@ class AddressViewModel @Inject constructor(
     private val getAllAddressesUseCase: GetAllAddressesUseCase
 ) : ViewModel() {
 
-    private val _addAddressState = MutableStateFlow<UiState<Unit>>(UiState.Idle)
+    private val _addAddressState = MutableStateFlow<UiState<String>>(UiState.Idle)
     val addAddressState = _addAddressState.asStateFlow()
 
     private val _updateAddressState = MutableStateFlow<UiState<Unit>>(UiState.Idle)
@@ -41,7 +41,7 @@ class AddressViewModel @Inject constructor(
         runCatching {
             addAddressUseCase(address)
         }.onSuccess {
-            _addAddressState.value = UiState.Success(Unit)
+            _addAddressState.value = UiState.Success("Address added successfully")
         }.onFailure { e ->
             _addAddressState.value = UiState.Error(e.message ?: "Unknown error")
         }

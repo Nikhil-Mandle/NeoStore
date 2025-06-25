@@ -7,6 +7,7 @@ import com.nikhilproject.domain.model.ForgetPasswordResponse
 import com.nikhilproject.domain.model.LogInRequest
 import com.nikhilproject.domain.model.RegisterRequest
 import com.nikhilproject.domain.model.ResetPasswordResponse
+import com.nikhilproject.domain.model.UpdateProfileResponse
 import com.nikhilproject.domain.model.User
 import com.nikhilproject.domain.repository.UserRepository
 import javax.inject.Inject
@@ -70,7 +71,7 @@ class UserRepositoryImpl @Inject constructor(
         dob: String,
         phoneNo: String,
         profilePic: String
-    ): User {
+    ): UpdateProfileResponse {
         val response = api.updateUserProfile(
             token = token,
             firstName = firstName,
@@ -80,6 +81,6 @@ class UserRepositoryImpl @Inject constructor(
             phoneNo = phoneNo,
             profilePic = profilePic
         )
-        return response.data.toDomain()
+        return response.toDomain()
     }
 }

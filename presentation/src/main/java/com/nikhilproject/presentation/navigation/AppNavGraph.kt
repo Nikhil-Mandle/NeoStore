@@ -8,6 +8,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
+import androidx.navigation.toRoute
 import com.nikhilproject.presentation.screens.AppSettingsScreen
 import com.nikhilproject.presentation.screens.HomeScreen
 import com.nikhilproject.presentation.screens.ProductDetailScreen
@@ -18,11 +19,11 @@ import com.nikhilproject.presentation.screens.accountsscreen.MyAccountScreen
 import com.nikhilproject.presentation.screens.accountsscreen.ResetPasswordScreen
 import com.nikhilproject.presentation.screens.authscreens.LoginScreen
 import com.nikhilproject.presentation.screens.authscreens.RegisterScreen
+import com.nikhilproject.presentation.screens.cartscreens.AddAddressScreen
 import com.nikhilproject.presentation.screens.cartscreens.AddressListScreen
 import com.nikhilproject.presentation.screens.cartscreens.MyCartScreen
 import com.nikhilproject.presentation.screens.orderscreens.MyOrdersList
 import com.nikhilproject.presentation.screens.orderscreens.OrderDetailsScreen
-import com.nikhilproject.presentation.screens.orderscreens.orderItems
 
 @Composable
 fun AppNavHost(navController: NavHostController, modifier: Modifier) {
@@ -107,11 +108,16 @@ fun NavGraphBuilder.profileGraph(navController: NavHostController) {
     ) {
 
         composable<MyAccountScreen> {
-            MyAccountScreen()
+            MyAccountScreen(onEditProfileClicked = { profilePic ->
+                navController.navigate(EditProfileScreenNav(profilePicUrl = profilePic ?: ""))
+            }, onResetPasswordClicked = {
+                navController.navigate(ResetPasswordScreen)
+            })
         }
 
-        composable<EditProfileScreen> {
-            EditProfileScreen()
+        composable<EditProfileScreenNav> { navEntry ->
+            val args = navEntry.toRoute<EditProfileScreenNav>()
+            EditProfileScreen(profilePicUrl = args.profilePicUrl ?: "")
         }
 
         composable<ResetPasswordScreen> {
@@ -135,7 +141,7 @@ fun NavGraphBuilder.cartGraph(navController: NavHostController) {
         startDestination = MyCartScreen,
     ) {
         composable<MyCartScreen> {
-            MyCartScreen(){
+            MyCartScreen() {
                 navController.navigate(AddressGraph)
             }
         }
@@ -147,11 +153,13 @@ fun NavGraphBuilder.addressGraph(navController: NavHostController) {
         startDestination = AddressListScreen,
     ) {
         composable<AddressListScreen> {
-            AddressListScreen()
+            AddressListScreen() {
+                navController.navigate(OrdersGraph)
+            }
         }
 
         composable<AddAddressScreen> {
-            AddressListScreen()
+            AddAddressScreen()
         }
     }
 }
@@ -161,13 +169,14 @@ fun NavGraphBuilder.ordersGraph(navController: NavHostController) {
         startDestination = MyOrdersListScreen,
     ) {
         composable<MyOrdersListScreen> {
-            MyOrdersList(){
-                navController.navigate(MyOrdersListScreen)
+            MyOrdersList() { id ->
+                navController.navigate(OrderDetailScreen(id = id))
             }
         }
 
-        composable<MyOrdersListScreen> {
-            OrderDetailsScreen(orderItems)
+        composable<OrderDetailScreen> { navEntry ->
+            val args = navEntry.toRoute<OrderDetailScreen>()
+            OrderDetailsScreen(id = args.id)
         }
     }
 }

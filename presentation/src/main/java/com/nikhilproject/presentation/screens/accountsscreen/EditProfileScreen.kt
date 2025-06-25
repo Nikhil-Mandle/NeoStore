@@ -1,6 +1,5 @@
 package com.nikhilproject.presentation.screens.accountsscreen
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Column
@@ -35,14 +34,13 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.nikhilproject.presentation.R
+import coil.compose.AsyncImage
 
 @Composable
-fun EditProfileScreen() {
+fun EditProfileScreen(profilePicUrl: String) {
     var firstName by remember { mutableStateOf("") }
     var lastName by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
@@ -58,9 +56,8 @@ fun EditProfileScreen() {
     ) {
         Spacer(modifier = Modifier.height(32.dp))
 
-        // Profile Image
-        Image(
-            painter = painterResource(id = R.drawable.empty_cart),
+        AsyncImage(
+            model = profilePicUrl,
             contentDescription = "Profile Image",
             contentScale = ContentScale.Crop,
             modifier = Modifier
@@ -78,6 +75,7 @@ fun EditProfileScreen() {
             label = "First Name",
             icon = Icons.Default.Person
         )
+
         ProfileTextField(
             value = lastName,
             onValueChange = { lastName = it },
@@ -109,7 +107,9 @@ fun EditProfileScreen() {
 
         // Submit Button
         Button(
-            onClick = { /* handle submit */ },
+            onClick = {
+
+            },
             colors = ButtonDefaults.buttonColors(containerColor = Color.White),
             modifier = Modifier
                 .fillMaxWidth()
@@ -155,5 +155,5 @@ fun ProfileTextField(
 @Preview
 @Composable
 private fun EditProfileScreenPreview() {
-    EditProfileScreen()
+    EditProfileScreen(profilePicUrl = "")
 }

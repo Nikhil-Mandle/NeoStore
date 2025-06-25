@@ -5,6 +5,7 @@ import com.nikhilproject.domain.model.ForgetPasswordResponse
 import com.nikhilproject.domain.model.LogInRequest
 import com.nikhilproject.domain.model.RegisterRequest
 import com.nikhilproject.domain.model.ResetPasswordResponse
+import com.nikhilproject.domain.model.UpdateProfileResponse
 import com.nikhilproject.domain.model.User
 
 interface UserRepository {
@@ -27,6 +28,6 @@ interface UserRepository {
         dob: String,
         phoneNo: String,
         profilePic: String
-    ): User
+    ): UpdateProfileResponse
 
 }

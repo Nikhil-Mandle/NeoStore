@@ -15,7 +15,7 @@ import com.nikhilproject.presentation.screens.components.ShowProgressDialog
 import com.nikhilproject.presentation.screens.components.ShowToastMessage
 import com.nikhilproject.presentation.screens.orderscreens.ProductOrderDialog
 import com.nikhilproject.presentation.screens.orderscreens.ProductRatingDialog
-import com.nikhilproject.presentation.viewmodel.AuthViewModel
+import com.nikhilproject.presentation.viewmodel.UserViewModel
 import com.nikhilproject.presentation.viewmodel.CartViewModel
 import com.nikhilproject.presentation.viewmodel.ProductViewModel
 
@@ -24,7 +24,7 @@ fun ProductDetailScreen(
     productId: Int,
     viewModel: ProductViewModel = hiltViewModel()
 ) {
-    val authViewModel: AuthViewModel = hiltViewModel()
+    val userViewModel: UserViewModel = hiltViewModel()
     val cartViewModel: CartViewModel = hiltViewModel()
 
     val productState by viewModel.productDetailState.collectAsStateWithLifecycle()
@@ -111,7 +111,7 @@ fun ProductDetailScreen(
         }
     ) {
         cartViewModel.addToCart(
-            accessToken = authViewModel.getAccessToken() ?: "",
+            accessToken = userViewModel.getAccessToken() ?: "",
             productId = productId,
             quantity = 2
         )

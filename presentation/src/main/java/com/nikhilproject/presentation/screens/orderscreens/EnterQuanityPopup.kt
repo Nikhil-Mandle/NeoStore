@@ -110,30 +110,6 @@ fun ProductOrderDialog(
     }
 }
 
-@Composable
-fun ProductScreen() {
-    var showDialog by remember { mutableStateOf(false) }
-
-    Column(
-        modifier = Modifier.fillMaxSize(),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
-    ) {
-        Button(onClick = { showDialog = true }) {
-            Text("Order Product")
-        }
-    }
-
-    ProductOrderDialog(
-        showDialog = showDialog,
-        onDismiss = { showDialog = false },
-        onSubmit = { qty ->
-            // Handle submit action
-            Log.d("ProductScreen", "Ordered qty: $qty")
-        }
-    )
-}
-
 @Preview
 @Composable
 private fun EnterQuantityPopPreview() {

@@ -31,12 +31,22 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import com.nikhilproject.presentation.viewmodel.UserViewModel
 
 @Composable
 fun ResetPasswordScreen() {
+    val userViewModel = hiltViewModel<UserViewModel>()
+    val token = userViewModel.getAccessToken()
+
     var currentPassword by remember { mutableStateOf("") }
     var newPassword by remember { mutableStateOf("") }
     var confirmPassword by remember { mutableStateOf("") }
+
+    var oldpasswordError by remember { mutableStateOf("") }
+    var newpasswordError by remember { mutableStateOf("") }
+    var confirmpasswordError by remember { mutableStateOf("") }
+
 
     Column(
         modifier = Modifier
@@ -61,19 +71,25 @@ fun ResetPasswordScreen() {
         PasswordTextField(
             value = currentPassword,
             onValueChange = { currentPassword = it },
-            label = "Current Password"
+            label = "Current Password",
+            isError = oldpasswordError.isNotEmpty(),
+            errorMessage = oldpasswordError
         )
 
         PasswordTextField(
             value = newPassword,
             onValueChange = { newPassword = it },
-            label = "New Password"
+            label = "New Password",
+            isError = newpasswordError.isNotEmpty(),
+            errorMessage = newpasswordError
         )
 
         PasswordTextField(
             value = confirmPassword,
             onValueChange = { confirmPassword = it },
-            label = "Confirm Password"
+            label = "Confirm Password",
+            isError = confirmpasswordError.isNotEmpty(),
+            errorMessage = confirmpasswordError
         )
 
         Spacer(modifier = Modifier.height(24.dp))
@@ -81,7 +97,38 @@ fun ResetPasswordScreen() {
         // Reset Password button
         Button(
             onClick = {
-                // handle reset password action
+                var isValid = true
+
+                if (currentPassword.isBlank()) {
+                    isValid = false
+                    oldpasswordError = "Old password is required"
+                }
+
+                if (newPassword.length < 6) {
+                    isValid = false
+                    newpasswordError = "Password must be at least 6 characters"
+                }
+
+                if (confirmPassword.length < 6) {
+                    isValid = false
+                    confirmpasswordError =
+                        "Password must be at least 6 characters"
+                }
+
+                if (newPassword != confirmPassword) {
+                    isValid = false
+                    newpasswordError = "Passwords do not match"
+                    confirmpasswordError = "Passwords do not match"
+                }
+
+                if (isValid && token != null) {
+                    userViewModel.changePassword(
+                        token = token,
+                        oldPassword = currentPassword,
+                        password = newPassword,
+                        confirmPassword = confirmPassword
+                    )
+                }
             },
             colors = ButtonDefaults.buttonColors(containerColor = Color.White),
             modifier = Modifier
@@ -98,7 +145,10 @@ fun ResetPasswordScreen() {
 fun PasswordTextField(
     value: String,
     onValueChange: (String) -> Unit,
-    label: String
+    label: String,
+    isError: Boolean = false,
+    errorMessage: String = ""
+
 ) {
     OutlinedTextField(
         value = value,
@@ -107,6 +157,7 @@ fun PasswordTextField(
         leadingIcon = {
             Icon(imageVector = Icons.Default.Lock, contentDescription = label, tint = Color.White)
         },
+        isError = isError,
         visualTransformation = PasswordVisualTransformation(),
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
         colors = TextFieldDefaults.outlinedTextFieldColors(
@@ -120,6 +171,15 @@ fun PasswordTextField(
             .fillMaxWidth()
             .padding(vertical = 6.dp)
     )
+
+    if (isError && errorMessage.isNotEmpty()) {
+        Text(
+            text = errorMessage,
+            color = MaterialTheme.colorScheme.error,
+            style = MaterialTheme.typography.bodySmall,
+            modifier = Modifier.padding(top = 4.dp)
+        )
+    }
 }
 
 

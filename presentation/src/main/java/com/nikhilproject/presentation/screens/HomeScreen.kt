@@ -17,9 +17,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
@@ -28,7 +26,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -42,23 +39,23 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.nikhilproject.domain.model.ProductCategory
 import com.nikhilproject.presentation.R
 import com.nikhilproject.presentation.UiState
-import com.nikhilproject.presentation.components.AutoSlidingImageSlider
-import com.nikhilproject.presentation.viewmodel.AuthViewModel
+import com.nikhilproject.presentation.screens.components.AutoSlidingImageSlider
+import com.nikhilproject.presentation.viewmodel.UserViewModel
 import com.nikhilproject.presentation.viewmodel.HomeScreenViewModel
 
 @Composable
 fun HomeScreen(
-    homeScreenViewModel: HomeScreenViewModel = hiltViewModel(),
     onItemClick: () -> Unit,
 ) {
-    val authViewModel = hiltViewModel<AuthViewModel>()
-    val token = authViewModel.getAccessToken()
+    val homeScreenViewModel: HomeScreenViewModel = hiltViewModel()
+    val userViewModel = hiltViewModel<UserViewModel>()
+    val token = userViewModel.getAccessToken()
 
     val uiState by homeScreenViewModel.uiState.collectAsState()
-    val imageList = remember { mutableStateListOf<String>() }
+//    val imageList = remember { mutableStateListOf<String>() }
 
     LaunchedEffect(Unit) {
-        homeScreenViewModel.fetchDashboard(accessToken = token ?: "")
+        homeScreenViewModel.fetchCategories(accessToken = token ?: "")
     }
 
     when (uiState) {
@@ -70,11 +67,22 @@ fun HomeScreen(
 
         is UiState.Success -> {
             val categories = (uiState as UiState.Success<List<ProductCategory>>).data
-            for (image in categories) {
-                if (image.icon_image.isNotEmpty()) {
-                    imageList.add(image.icon_image)
+
+//            imageList.clear()
+//            for (image in categories) {
+//                if (image.icon_image.isNotEmpty()) {
+//                    imageList.add(image.icon_image)
+//                }
+//            }
+
+            val imageList = remember(uiState) {
+                if (uiState is UiState.Success) {
+                    categories.filter { it.icon_image.isNotEmpty() }.map { it.icon_image }
+                } else {
+                    emptyList()
                 }
             }
+
 
             Column(
                 modifier = Modifier
