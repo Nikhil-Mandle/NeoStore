@@ -21,6 +21,8 @@ import com.nikhilproject.presentation.viewmodel.ProductViewModel
 
 @Composable
 fun ProductDetailScreen(
+    productName: String,
+    productImage: String,
     productId: Int,
     viewModel: ProductViewModel = hiltViewModel()
 ) {
@@ -101,6 +103,8 @@ fun ProductDetailScreen(
     )
 
     ProductOrderDialog(
+        productName = productName,
+        productImage = productImage,
         showDialog = showQuantityDialog,
         onDismiss = {
             showQuantityDialog = false
@@ -112,15 +116,4 @@ fun ProductDetailScreen(
             quantity = qty.toInt()
         )
     }
-
-
 }
-
-@Composable
-fun AddToCartState(addToCartState: UiState<CartOperationResponse>) {
-
-}
-
-
-
-

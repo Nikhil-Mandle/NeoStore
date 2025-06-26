@@ -27,7 +27,7 @@ data object ProductGraph
 data class ProductListScreenNav(val categoryId: Int)
 
 @Serializable
-data class ProductDetailScreenNav(val productId: Int)
+data class ProductDetailScreenNav(val productId: Int, val productName: String, val productImage: String)
 
 @Serializable
 data object ProfileGraph

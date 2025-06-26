@@ -1,10 +1,8 @@
 package com.nikhilproject.presentation.screens.orderscreens
 
-import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -29,20 +27,24 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
-import com.nikhilproject.presentation.R
+import coil.compose.AsyncImage
+import coil.compose.rememberAsyncImagePainter
 
 @Composable
 fun ProductOrderDialog(
+    productName: String,
+    productImage: String,
     showDialog: Boolean,
     onDismiss: () -> Unit,
     onSubmit: (String) -> Unit
 ) {
+    val context = LocalContext.current
     if (showDialog) {
         Dialog(onDismissRequest = onDismiss) {
             Card(
@@ -59,15 +61,15 @@ fun ProductOrderDialog(
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Text(
-                        text = "6 Seater Dining Table",
+                        text = productName,
                         style = MaterialTheme.typography.bodyLarge,
                         textAlign = TextAlign.Center,
                         modifier = Modifier.padding(bottom = 16.dp)
                     )
 
-                    Image(
-                        painter = painterResource(id = R.drawable.table), // replace with your image
-                        contentDescription = "Dining Table",
+                    AsyncImage(
+                        model = productImage,
+                        contentDescription = productName,
                         contentScale = ContentScale.Fit,
                         modifier = Modifier
                             .size(200.dp)
@@ -94,8 +96,37 @@ fun ProductOrderDialog(
 
                     Button(
                         onClick = {
-                            onSubmit(qty)
-                            onDismiss()
+                            val qtyInt = qty.toIntOrNull()
+                            when {
+                                qty.isBlank() -> {
+                                    Toast.makeText(
+                                        context,
+                                        "Quantity is required",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                }
+
+                                qtyInt == null -> {
+                                    Toast.makeText(
+                                        context,
+                                        "Enter a valid number",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                }
+
+                                qtyInt > 8 -> {
+                                    Toast.makeText(
+                                        context,
+                                        "Quantity cannot exceed 8",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                }
+
+                                else -> {
+                                    onSubmit(qty)
+                                    onDismiss()
+                                }
+                            }
                         },
                         colors = ButtonDefaults.buttonColors(containerColor = Color.Red),
                         modifier = Modifier
@@ -113,5 +144,10 @@ fun ProductOrderDialog(
 @Preview
 @Composable
 private fun EnterQuantityPopPreview() {
-    ProductOrderDialog(showDialog = true, {}, {})
+    ProductOrderDialog(
+        showDialog = true,
+        productName = "",
+        productImage = "",
+        onDismiss = {},
+        onSubmit = {})
 }

@@ -99,14 +99,24 @@ fun NavGraphBuilder.productGraph(navController: NavHostController) {
     navigation<ProductGraph>(startDestination = ProductListScreenNav::class) {
         composable<ProductListScreenNav> { navEntry ->
             val args = navEntry.toRoute<ProductListScreenNav>()
-            ProductListScreen(categoryId = args.categoryId) { id ->
-                navController.navigate(ProductDetailScreenNav(productId = id))
+            ProductListScreen(categoryId = args.categoryId) { id, name, image ->
+                navController.navigate(
+                    ProductDetailScreenNav(
+                        productId = id,
+                        productName = name,
+                        productImage = image
+                    )
+                )
             }
         }
 
         composable<ProductDetailScreenNav> { navEntry ->
             val args = navEntry.toRoute<ProductDetailScreenNav>()
-            ProductDetailScreen(args.productId)
+            ProductDetailScreen(
+                productId = args.productId,
+                productImage = args.productImage,
+                productName = args.productName
+            )
         }
     }
 }
