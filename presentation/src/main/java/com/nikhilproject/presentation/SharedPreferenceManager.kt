@@ -1,16 +1,14 @@
 package com.nikhilproject.presentation
 
 import android.content.Context
+import com.nikhilproject.presentation.utils.Constant.ACCESS_TOKEN
+import com.nikhilproject.presentation.utils.Constant.PROFILE_PIC
+import com.nikhilproject.presentation.utils.Constant.SHARED_PREFERENCE_NAME
+import com.nikhilproject.presentation.utils.Constant.USER_EMAIL
+import com.nikhilproject.presentation.utils.Constant.USER_NAME
 import javax.inject.Inject
 
-const val SHARED_PREFERENCE_NAME = "NeostorePref"
-const val ACCESS_TOKEN = "access_token"
-const val USER_NAME = "user_name"
-const val USER_EMAIL = "user_email"
-const val PROFILE_PIC = "profile_pic"
-
-// TODO: Need to change name to SharedPreference
-class TokenManager @Inject constructor(private val context: Context) {
+class SharedPreferenceManager @Inject constructor(private val context: Context) {
 
     private val sharedPreferences =
         context.getSharedPreferences(SHARED_PREFERENCE_NAME, Context.MODE_PRIVATE)

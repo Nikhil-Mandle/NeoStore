@@ -1,7 +1,7 @@
 package com.nikhilproject.presentation.di
 
 import android.content.Context
-import com.nikhilproject.presentation.TokenManager
+import com.nikhilproject.presentation.SharedPreferenceManager
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -11,11 +11,11 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-class TokenManagerModule {
+class SharedPreferenceManagerModule {
 
     @Provides
     @Singleton
-    fun providesTokenManager(@ApplicationContext context: Context): TokenManager {
-        return TokenManager(context)
+    fun providesSharedPreferenceManager(@ApplicationContext context: Context): SharedPreferenceManager {
+        return SharedPreferenceManager(context)
     }
 }

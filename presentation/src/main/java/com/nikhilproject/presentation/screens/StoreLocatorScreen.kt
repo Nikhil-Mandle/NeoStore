@@ -19,6 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.compose.GoogleMap
@@ -26,51 +27,37 @@ import com.google.maps.android.compose.Marker
 import com.google.maps.android.compose.MarkerState
 import com.google.maps.android.compose.rememberCameraPositionState
 
-data class Store(
-    val name: String,
-    val address: String,
-    val latLng: LatLng
-)
-
-val dummyStores = listOf(
-    Store("SKYLAND STORE", "6335 Edgewood Road Reisterstown, MD 21136", LatLng(39.4579, -76.8161)),
-    Store(
-        "WOODMOUNT STORE",
-        "9437 Pin Oak Drive South Plainfield, NJ 07080",
-        LatLng(40.5796, -74.4194)
-    ),
-    Store("NATUFUR STORE", "3798 Pennsylvania Avenue Brandon, FL 33510", LatLng(27.9374, -82.2971)),
-    Store("LAVANDER STORE", "9311 Garfield Avenue Hamburg, NY 14075", LatLng(42.7156, -78.8291)),
-    Store("FURNIMATT STORE", "7346 Hanover Court Arlington, MA 02474", LatLng(42.4195, -71.1698))
-)
-
-
 @Composable
 fun StoreLocatorScreen(modifier: Modifier = Modifier) {
-    val selectedStore = remember { mutableStateOf<Store?>(dummyStores.first()) }
+    val selectedStore = remember { mutableStateOf<Store?>(storeLocation.first()) }
 
     Column(modifier = modifier.fillMaxSize()) {
 
         GoogleMap(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(250.dp),
+                .height(350.dp),
             cameraPositionState = rememberCameraPositionState {
-                position = CameraPosition.fromLatLngZoom(dummyStores.first().latLng, 5f)
+                position = CameraPosition.fromLatLngZoom(storeLocation.first().latLng, 5f)
             }
         ) {
-            dummyStores.forEach { store ->
+            storeLocation.forEach { store ->
                 Marker(
                     state = MarkerState(position = store.latLng),
                     title = store.name,
-                    snippet = store.address
+                    snippet = store.address,
+                    icon = BitmapDescriptorFactory.defaultMarker(
+                        if (store == selectedStore.value) BitmapDescriptorFactory.HUE_RED
+                        else BitmapDescriptorFactory.HUE_BLUE
+                    )
                 )
             }
         }
 
+
         // List Section
         LazyColumn(modifier = Modifier.fillMaxSize()) {
-            items(dummyStores) { store ->
+            items(storeLocation) { store ->
                 StoreListItem(
                     store = store,
                     isSelected = selectedStore.value == store,
@@ -80,7 +67,6 @@ fun StoreLocatorScreen(modifier: Modifier = Modifier) {
         }
     }
 }
-
 
 @Composable
 fun StoreListItem(store: Store, isSelected: Boolean, onClick: () -> Unit) {
@@ -106,3 +92,32 @@ fun StoreListItem(store: Store, isSelected: Boolean, onClick: () -> Unit) {
         )
     }
 }
+
+data class Store(
+    val name: String,
+    val address: String,
+    val latLng: LatLng
+)
+
+val storeLocation = listOf(
+    Store(
+        "NeoSOFT DADAR",
+        "The Ruby Tower, Senapati Bapat Marg, Dadar West, Mumbai, Maharashtra 400028",
+        LatLng(19.0244, 72.8444)
+    ),
+    Store(
+        "NeoSOFT PAREL",
+        "9th floor, Business arcade, Sayani Rd, Parel Bus Depot, Dighe Nagar, Prabhadevi, Mumbai, Maharashtra 400025",
+        LatLng(19.0158, 72.8294)
+    ),
+    Store(
+        "NeoSOFT AIROLI",
+        "Plot No. 3, (Part) Kalwa TTC Industrial Area, MIDC Railway Station, near Airoli, Airoli East, Navi Mumbai, Maharashtra 400708",
+        LatLng(19.157934, 72.993477)
+    ),
+    Store(
+        "NeoSOFT PUNE",
+        "NTPL SEZ (Blueridge), IT-08/09, 10th Floor, Hinjewadi Phase 1 Rd, Hinjawadi Rajiv Gandhi Infotech Park, Hinjawadi, Pune, Maharashtra 411057",
+        LatLng(18.5887, 73.7355)
+    ),
+)

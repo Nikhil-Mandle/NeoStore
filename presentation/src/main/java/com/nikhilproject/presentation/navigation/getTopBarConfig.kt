@@ -18,8 +18,8 @@ fun getTopBarConfig(
     drawerState: DrawerState,
     scope: CoroutineScope
 ): TopBarConfig? {
-    return when (currentRoute) {
-        HomeScreen::class.qualifiedName -> TopBarConfig(
+    return when {
+        currentRoute == HomeScreen::class.qualifiedName -> TopBarConfig(
             title = "NeoSTORE",
             icon = Icons.Default.Menu,
             onNavigationClick = {
@@ -29,37 +29,39 @@ fun getTopBarConfig(
             }
         )
 
-        ProductListScreen::class.qualifiedName -> TopBarConfig(
+        currentRoute == ProductListScreen::class.qualifiedName -> TopBarConfig(
             title = "Products",
             icon = Icons.Default.ArrowBack,
             onNavigationClick = { navController.popBackStack() }
         )
 
-        ProductDetailScreenNav::class.qualifiedName -> TopBarConfig(
+        currentRoute?.startsWith(
+            ProductDetailScreenNav::class.qualifiedName ?: ""
+        ) == true -> TopBarConfig(
             title = "Product Detail",
             icon = Icons.Default.ArrowBack,
             onNavigationClick = { navController.popBackStack() }
         )
 
-        ResetPasswordScreen::class.qualifiedName -> TopBarConfig(
+        currentRoute == ResetPasswordScreen::class.qualifiedName -> TopBarConfig(
             title = "Update Profile",
             icon = Icons.Default.ArrowBack,
             onNavigationClick = { navController.popBackStack() }
         )
 
-        AppSettingsScreen::class.qualifiedName -> TopBarConfig(
+        currentRoute == AppSettingsScreen::class.qualifiedName -> TopBarConfig(
             title = "Settings",
             icon = Icons.Default.ArrowBack,
             onNavigationClick = { navController.popBackStack() }
         )
 
-        MyCartScreen::class.qualifiedName -> TopBarConfig(
+        currentRoute == MyCartScreen::class.qualifiedName -> TopBarConfig(
             title = "My Cart",
             icon = Icons.Default.ArrowBack,
             onNavigationClick = { navController.popBackStack() }
         )
 
-        AddressListScreen::class.qualifiedName -> TopBarConfig(
+        currentRoute == AddressListScreen::class.qualifiedName -> TopBarConfig(
             title = "Address List",
             icon = Icons.Default.ArrowBack,
             endIcon = Icons.Default.Add,
@@ -69,37 +71,41 @@ fun getTopBarConfig(
             onNavigationClick = { navController.popBackStack() }
         )
 
-        AddAddressScreen::class.qualifiedName -> TopBarConfig(
+        currentRoute == AddAddressScreen::class.qualifiedName -> TopBarConfig(
             title = "Add Address",
             icon = Icons.Default.ArrowBack,
             onNavigationClick = { navController.popBackStack() }
         )
 
-        MyOrdersListScreen::class.qualifiedName -> TopBarConfig(
+        currentRoute == MyOrdersListScreen::class.qualifiedName -> TopBarConfig(
             title = "My Orders",
             icon = Icons.Default.ArrowBack,
             onNavigationClick = { navController.popBackStack() }
         )
 
-        OrderDetailScreen::class.qualifiedName -> TopBarConfig(
+        currentRoute?.startsWith(
+            OrderDetailScreen::class.qualifiedName ?: ""
+        ) == true -> TopBarConfig(
             title = "Order Details",
             icon = Icons.Default.ArrowBack,
             onNavigationClick = { navController.popBackStack() }
         )
 
-        StoreLocatorScreen::class.qualifiedName -> TopBarConfig(
+        currentRoute == StoreLocatorScreen::class.qualifiedName -> TopBarConfig(
             title = "Store Locator",
             icon = Icons.Default.ArrowBack,
             onNavigationClick = { navController.popBackStack() }
         )
 
-        MyAccountScreen::class.qualifiedName -> TopBarConfig(
+        currentRoute == MyAccountScreen::class.qualifiedName -> TopBarConfig(
             title = "My Account",
             icon = Icons.Default.ArrowBack,
             onNavigationClick = { navController.popBackStack() }
         )
 
-        EditProfileScreenNav::class.qualifiedName -> TopBarConfig(
+        currentRoute?.startsWith(
+            EditProfileScreenNav::class.qualifiedName ?: ""
+        ) == true -> TopBarConfig(
             title = "Edit Profile",
             icon = Icons.Default.ArrowBack,
             onNavigationClick = { navController.popBackStack() }

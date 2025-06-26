@@ -9,7 +9,7 @@ import com.nikhilproject.domain.usecase.ChangePasswordUseCase
 import com.nikhilproject.domain.usecase.LoginUserUseCase
 import com.nikhilproject.domain.usecase.RegisterUserUseCase
 import com.nikhilproject.domain.usecase.UpdateProfileUseCase
-import com.nikhilproject.presentation.TokenManager
+import com.nikhilproject.presentation.SharedPreferenceManager
 import com.nikhilproject.presentation.UiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -24,7 +24,7 @@ class UserViewModel @Inject constructor(
     private val loginUseCase: LoginUserUseCase,
     private val changePasswordUseCase: ChangePasswordUseCase,
     private val updateProfileUseCase: UpdateProfileUseCase,
-    private val tokenManager: TokenManager
+    private val sharedPreferenceManager: SharedPreferenceManager
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow<UiState<User>>(UiState.Idle)
@@ -40,9 +40,10 @@ class UserViewModel @Inject constructor(
         _uiState.value = UiState.Loading
         runCatching { registerUseCase(req) }
             .onSuccess { user ->
-                tokenManager.addAccessToken(user.accessToken)
-                tokenManager.saveUserName(user.firstName + " " + user.lastName)
-                tokenManager.saveUserEmail(user.email)
+                sharedPreferenceManager.addAccessToken(user.accessToken)
+                sharedPreferenceManager.saveUserName(user.firstName + " " + user.lastName)
+                sharedPreferenceManager.saveUserEmail(user.email)
+                user.profilePic?.let { sharedPreferenceManager.saveProfilePic(it) }
                 _uiState.value = UiState.Success(user)
             }
             .onFailure { ex ->
@@ -55,9 +56,10 @@ class UserViewModel @Inject constructor(
         _uiState.value = UiState.Loading
         runCatching { loginUseCase(req) }
             .onSuccess { user ->
-                tokenManager.addAccessToken(user.accessToken)
-                tokenManager.saveUserName(user.firstName + " " + user.lastName)
-                tokenManager.saveUserEmail(user.email)
+                sharedPreferenceManager.addAccessToken(user.accessToken)
+                sharedPreferenceManager.saveUserName(user.firstName + " " + user.lastName)
+                sharedPreferenceManager.saveUserEmail(user.email)
+                user.profilePic?.let { sharedPreferenceManager.saveProfilePic(it) }
                 _uiState.value = UiState.Success(user)
             }
             .onFailure { ex ->
@@ -115,12 +117,12 @@ class UserViewModel @Inject constructor(
     }
 
 
-    fun getAccessToken() = tokenManager.getAccessToken()
+    fun getAccessToken() = sharedPreferenceManager.getAccessToken()
 
-    fun getUserName() = tokenManager.getUserName()
+    fun getUserName() = sharedPreferenceManager.getUserName()
 
-    fun getUserEmail() = tokenManager.getUserEmail()
+    fun getUserEmail() = sharedPreferenceManager.getUserEmail()
 
-    fun getProfilePic() = tokenManager.getProfilePic()
+    fun getProfilePic() = sharedPreferenceManager.getProfilePic()
 
 }
