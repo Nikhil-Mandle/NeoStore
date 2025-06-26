@@ -1,10 +1,16 @@
 package com.nikhilproject.presentation.screens.accountsscreen
 
+import android.Manifest
 import android.app.DatePickerDialog
 import android.content.ContentValues
 import android.content.Context
+import android.content.pm.PackageManager
 import android.net.Uri
+import android.os.Build
 import android.provider.MediaStore
+import android.widget.Toast
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -22,6 +28,7 @@ import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Phone
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -46,6 +53,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.core.content.ContextCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import com.nikhilproject.presentation.UiState
@@ -74,6 +82,85 @@ fun EditProfileScreen(initialProfilePicUrl: String) {
     val dobFormatter = remember { SimpleDateFormat("dd-MM-yyyy", Locale.getDefault()) }
     val calendar = remember { Calendar.getInstance() }
 
+    val cameraPermission = Manifest.permission.CAMERA
+
+    val contentResolver = context.contentResolver
+
+    var imageUri by remember { mutableStateOf<Uri?>(null) }
+    var showDialog by remember { mutableStateOf(false) }
+    var shouldShowDialogAfterPermission by remember { mutableStateOf(false) }
+
+    val cameraLauncher = rememberLauncherForActivityResult(ActivityResultContracts.TakePicturePreview()) { bitmap ->
+        bitmap?.let {
+            val uri = Uri.parse(MediaStore.Images.Media.insertImage(contentResolver, it, null, null))
+            imageUri = uri
+        }
+    }
+
+    val galleryLauncher = rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { uri ->
+        uri?.let {
+            imageUri = it
+        }
+    }
+
+    val storagePermission = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+        Manifest.permission.READ_MEDIA_IMAGES
+    } else {
+        Manifest.permission.READ_EXTERNAL_STORAGE
+    }
+
+    val permissionLauncher = rememberLauncherForActivityResult(
+        ActivityResultContracts.RequestMultiplePermissions()
+    ) { permissions ->
+        val hasCamera = permissions[cameraPermission] == true
+        val hasStorage = permissions[storagePermission] == true
+
+        if (hasCamera && hasStorage) {
+            if (shouldShowDialogAfterPermission) {
+                showDialog = true
+                shouldShowDialogAfterPermission = false
+            }
+        } else {
+            Toast.makeText(context, "Permissions denied", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    val handleImageClick = {
+        val hasCameraPermission = ContextCompat.checkSelfPermission(context, cameraPermission) == PackageManager.PERMISSION_GRANTED
+        val hasStoragePermission = ContextCompat.checkSelfPermission(context, storagePermission) == PackageManager.PERMISSION_GRANTED
+
+        if (hasCameraPermission && hasStoragePermission) {
+            showDialog = true
+        } else {
+            shouldShowDialogAfterPermission = true
+            permissionLauncher.launch(arrayOf(cameraPermission, storagePermission))
+        }
+    }
+
+    if (showDialog) {
+        AlertDialog(
+            onDismissRequest = { showDialog = false },
+            title = { Text("Choose Image From") },
+            confirmButton = {
+                Text("Camera", modifier = Modifier
+                    .fillMaxWidth()
+                    .clickable {
+                        showDialog = false
+                        cameraLauncher.launch(null)
+                    }
+                    .padding(8.dp))
+            },
+            dismissButton = {
+                Text("Gallery", modifier = Modifier
+                    .fillMaxWidth()
+                    .clickable {
+                        showDialog = false
+                        galleryLauncher.launch("image/*")
+                    }
+                    .padding(8.dp))
+            }
+        )
+    }
 
     val showDatePicker = {
         DatePickerDialog(
@@ -121,13 +208,14 @@ fun EditProfileScreen(initialProfilePicUrl: String) {
         Spacer(modifier = Modifier.height(32.dp))
 
         AsyncImage(
-            model = initialProfilePicUrl,
+            model = imageUri ?: initialProfilePicUrl,
             contentDescription = "Profile Image",
             contentScale = ContentScale.Crop,
             modifier = Modifier
                 .size(120.dp)
                 .clip(CircleShape)
                 .border(2.dp, Color.White, CircleShape)
+                .clickable { handleImageClick() }
         )
 
         Spacer(modifier = Modifier.height(32.dp))
@@ -180,7 +268,7 @@ fun EditProfileScreen(initialProfilePicUrl: String) {
                     email = email,
                     dob = dob,
                     phoneNo = phone,
-                    profilePic = initialProfilePicUrl
+                    profilePic = imageUri?.toString() ?: initialProfilePicUrl
                 )
             },
             colors = ButtonDefaults.buttonColors(containerColor = Color.White),
