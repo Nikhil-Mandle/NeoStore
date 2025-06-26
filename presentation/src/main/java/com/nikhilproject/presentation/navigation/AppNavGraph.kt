@@ -118,7 +118,7 @@ fun NavGraphBuilder.profileGraph(navController: NavHostController) {
 
         composable<EditProfileScreenNav> { navEntry ->
             val args = navEntry.toRoute<EditProfileScreenNav>()
-            EditProfileScreen(profilePicUrl = args.profilePicUrl ?: "")
+            EditProfileScreen(initialProfilePicUrl = args.profilePicUrl ?: "")
         }
 
         composable<ResetPasswordScreen> {
