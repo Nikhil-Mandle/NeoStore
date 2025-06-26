@@ -80,29 +80,30 @@ fun NavGraphBuilder.homeGraph(navController: NavHostController) {
         startDestination = HomeScreen,
     ) {
         composable<HomeScreen> {
-            HomeScreen(onItemClick = {
-                navController.navigate(ProductGraph)
+            HomeScreen(onItemClick = { id ->
+                navController.navigate(ProductListScreenNav(categoryId = id))
             })
         }
     }
 }
 
 fun NavGraphBuilder.productGraph(navController: NavHostController) {
-    navigation<ProductGraph>(startDestination = ProductListScreen) {
-        composable<ProductListScreen> {
-            ProductListScreen() {
-                navController.navigate(ProductDetailScreenNav(productId = 1))
+    navigation<ProductGraph>(startDestination = ProductListScreenNav::class) {
+        composable<ProductListScreenNav> { navEntry ->
+            val args = navEntry.toRoute<ProductListScreenNav>()
+            ProductListScreen(categoryId = args.categoryId) { id ->
+                navController.navigate(ProductDetailScreenNav(productId = id))
             }
         }
 
-        composable<ProductDetailScreenNav> {
-            ProductDetailScreen(1)
+        composable<ProductDetailScreenNav> { navEntry ->
+            val args = navEntry.toRoute<ProductDetailScreenNav>()
+            ProductDetailScreen(args.productId)
         }
     }
 }
 
 fun NavGraphBuilder.profileGraph(navController: NavHostController) {
-
     navigation<ProfileGraph>(
         startDestination = ResetPasswordScreen,
     ) {
@@ -154,11 +155,7 @@ fun NavGraphBuilder.addressGraph(navController: NavHostController) {
     ) {
         composable<AddressListScreen> {
             AddressListScreen() {
-                navController.navigate(OrdersGraph) {
-                    popUpTo(HomeGraph) {
-                        inclusive = true
-                    }
-                }
+                navController.navigate(OrdersGraph)
             }
         }
 
@@ -190,4 +187,3 @@ fun NavGraphBuilder.storeLocatorGraph(navController: NavHostController) {
         StoreLocatorScreen()
     }
 }
-

@@ -21,7 +21,7 @@ data object HomeScreen
 data object ProductGraph
 
 @Serializable
-data object ProductListScreen
+data class ProductListScreenNav(val categoryId: Int)
 
 @Serializable
 data class ProductDetailScreenNav(val productId: Int)

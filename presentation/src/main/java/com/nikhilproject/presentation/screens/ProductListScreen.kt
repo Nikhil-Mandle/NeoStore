@@ -41,11 +41,12 @@ import com.nikhilproject.presentation.viewmodel.ProductViewModel
 
 @Composable
 fun ProductListScreen(
+    categoryId: Int,
     viewModel: ProductViewModel = hiltViewModel(),
-    onItemClick: (ProductItem) -> Unit
+    onItemClick: (Int) -> Unit
 ) {
     LaunchedEffect(true) {
-        viewModel.fetchProductList(2)
+        viewModel.fetchProductList(categoryId)
     }
 
     val uiState by viewModel.productListState.collectAsStateWithLifecycle()
@@ -62,8 +63,8 @@ fun ProductListScreen(
 
             LazyColumn(modifier = Modifier.fillMaxSize()) {
                 items(itemList) { item ->
-                    FurnitureListItem(item = item) {
-                        onItemClick(item)
+                    FurnitureListItem(item = item) { id ->
+                        onItemClick(id)
                     }
                     HorizontalDivider(color = Color.LightGray)
                 }
@@ -84,12 +85,12 @@ fun ProductListScreen(
 
 
 @Composable
-fun FurnitureListItem(item: ProductItem, onClick: () -> Unit) {
+fun FurnitureListItem(item: ProductItem, onClick: (Int) -> Unit) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .padding(8.dp)
-            .clickable { onClick() },
+            .clickable { onClick(item.id) },
     ) {
         AsyncImage(
             model = item.product_images,

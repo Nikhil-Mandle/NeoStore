@@ -21,7 +21,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import coil.compose.rememberAsyncImagePainter
@@ -30,7 +29,7 @@ import com.nikhilproject.presentation.navigation.LoginScreen
 import com.nikhilproject.presentation.navigation.MyAccountScreen
 import com.nikhilproject.presentation.navigation.MyCartScreen
 import com.nikhilproject.presentation.navigation.MyOrdersListScreen
-import com.nikhilproject.presentation.navigation.ProductListScreen
+import com.nikhilproject.presentation.navigation.ProductListScreenNav
 import com.nikhilproject.presentation.navigation.StoreLocatorScreen
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -94,22 +93,22 @@ fun DrawerContent(
 
         DrawerItem(icon = R.drawable.table, label = "Tables") {
             scope.launch { drawerState.close() }
-            navController.navigate(ProductListScreen)
+            navController.navigate(ProductListScreenNav(1))
         }
 
         DrawerItem(icon = R.drawable.sofa, label = "Sofas") {
             scope.launch { drawerState.close() }
-            navController.navigate(ProductListScreen)
+            navController.navigate(ProductListScreenNav(2))
         }
 
         DrawerItem(icon = R.drawable.chair, label = "Chairs") {
             scope.launch { drawerState.close() }
-            navController.navigate(ProductListScreen)
+            navController.navigate(ProductListScreenNav(3))
         }
 
         DrawerItem(icon = R.drawable.closet, label = "Cupboards") {
             scope.launch { drawerState.close() }
-            navController.navigate(ProductListScreen)
+            navController.navigate(ProductListScreenNav(4))
         }
 
         DrawerItem(icon = R.drawable.person, label = "My Account") {

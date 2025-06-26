@@ -39,20 +39,19 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.nikhilproject.domain.model.ProductCategory
 import com.nikhilproject.presentation.R
 import com.nikhilproject.presentation.UiState
-import com.nikhilproject.presentation.screens.components.AutoSlidingImageSlider
+import com.nikhilproject.presentation.screens.components.ImageSlider
 import com.nikhilproject.presentation.viewmodel.UserViewModel
 import com.nikhilproject.presentation.viewmodel.HomeScreenViewModel
 
 @Composable
 fun HomeScreen(
-    onItemClick: () -> Unit,
+    onItemClick: (Int) -> Unit,
 ) {
     val homeScreenViewModel: HomeScreenViewModel = hiltViewModel()
     val userViewModel = hiltViewModel<UserViewModel>()
     val token = userViewModel.getAccessToken()
 
     val uiState by homeScreenViewModel.uiState.collectAsState()
-//    val imageList = remember { mutableStateListOf<String>() }
 
     LaunchedEffect(Unit) {
         homeScreenViewModel.fetchCategories(accessToken = token ?: "")
@@ -68,13 +67,6 @@ fun HomeScreen(
         is UiState.Success -> {
             val categories = (uiState as UiState.Success<List<ProductCategory>>).data
 
-//            imageList.clear()
-//            for (image in categories) {
-//                if (image.icon_image.isNotEmpty()) {
-//                    imageList.add(image.icon_image)
-//                }
-//            }
-
             val imageList = remember(uiState) {
                 if (uiState is UiState.Success) {
                     categories.filter { it.icon_image.isNotEmpty() }.map { it.icon_image }
@@ -83,12 +75,11 @@ fun HomeScreen(
                 }
             }
 
-
             Column(
                 modifier = Modifier
                     .fillMaxSize()
             ) {
-                AutoSlidingImageSlider(imageList)
+                ImageSlider(imageList)
 
                 Spacer(modifier = Modifier.height(8.dp))
 
@@ -113,12 +104,13 @@ fun HomeScreen(
 
                         CategoryCard(
                             category = Category(
+                                categoryId = category.id,
                                 name = name,
                                 image = imageResId,
                                 bgColor = Color.Red
                             )
-                        ){
-                            onItemClick()
+                        ){ id ->
+                            onItemClick(id)
                         }
                     }
                 }
@@ -136,13 +128,13 @@ fun HomeScreen(
 }
 
 @Composable
-fun CategoryCard(category: Category, onClick: () -> Unit) {
+fun CategoryCard(category: Category, onClick: (Int) -> Unit) {
     Card(
         modifier = Modifier
             .aspectRatio(1f)
             .fillMaxWidth()
             .clickable {
-                onClick()
+                onClick(category.categoryId)
             },
         shape = RoundedCornerShape(8.dp),
         elevation = CardDefaults.cardElevation(4.dp)
@@ -169,7 +161,7 @@ fun CategoryCard(category: Category, onClick: () -> Unit) {
     }
 }
 
-data class Category(val name: String, val image: Int, val bgColor: Color)
+data class Category(val categoryId: Int,val name: String, val image: Int, val bgColor: Color)
 
 @Preview
 @Composable

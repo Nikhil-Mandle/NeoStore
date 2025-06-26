@@ -29,7 +29,7 @@ fun getTopBarConfig(
             }
         )
 
-        currentRoute == ProductListScreen::class.qualifiedName -> TopBarConfig(
+        currentRoute?.startsWith(ProductListScreenNav::class.qualifiedName ?: "") == true -> TopBarConfig(
             title = "Products",
             icon = Icons.Default.ArrowBack,
             onNavigationClick = { navController.popBackStack() }

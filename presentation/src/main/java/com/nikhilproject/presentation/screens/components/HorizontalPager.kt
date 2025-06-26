@@ -26,7 +26,7 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 
 @Composable
-fun AutoSlidingImageSlider(
+fun ImageSlider(
     imageUrls: List<String>
 ) {
     val pagerState = rememberPagerState(pageCount = { imageUrls.size })
