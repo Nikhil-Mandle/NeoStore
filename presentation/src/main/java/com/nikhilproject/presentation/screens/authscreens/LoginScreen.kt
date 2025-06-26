@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Person
@@ -35,6 +36,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -51,13 +53,9 @@ fun LoginScreen(
     viewModel: UserViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
-    var username by remember { mutableStateOf("") }
-    var password by remember { mutableStateOf("") }
+    var username by remember { mutableStateOf("nikhil1@test.com") }
+    var password by remember { mutableStateOf("Nikhil1234") }
 
-    username = "nikhil1@test.com"
-    password = "Nikhil1234"
-
-    // Observe success and navigate
     LaunchedEffect(uiState) {
         if (uiState is UiState.Success) {
             onLoginSuccess()
@@ -79,26 +77,26 @@ fun LoginScreen(
             Text("NeoSTORE", fontSize = 32.sp, fontWeight = FontWeight.Bold, color = Color.White)
             Spacer(modifier = Modifier.height(32.dp))
 
-            // Username
             OutlinedTextField(
                 value = username,
                 onValueChange = { username = it },
                 label = { Text("Username") },
                 leadingIcon = { Icon(Icons.Default.Person, contentDescription = null) },
                 singleLine = true,
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
                 colors = TextFieldDefaults.outlinedTextFieldColors(
                     focusedBorderColor = Color.White,
                     unfocusedBorderColor = Color.LightGray,
                     cursorColor = Color.White,
                     focusedLabelColor = Color.White,
-                    unfocusedLabelColor = Color.LightGray
+                    unfocusedLabelColor = Color.LightGray,
+                    focusedTextColor = Color.White
                 ),
                 modifier = Modifier.fillMaxWidth()
             )
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            // Password
             OutlinedTextField(
                 value = password,
                 onValueChange = { password = it },
@@ -106,24 +104,27 @@ fun LoginScreen(
                 leadingIcon = { Icon(Icons.Default.Lock, contentDescription = null) },
                 singleLine = true,
                 visualTransformation = PasswordVisualTransformation(),
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
                 colors = TextFieldDefaults.outlinedTextFieldColors(
                     focusedBorderColor = Color.White,
                     unfocusedBorderColor = Color.LightGray,
                     cursorColor = Color.White,
                     focusedLabelColor = Color.White,
-                    unfocusedLabelColor = Color.LightGray
+                    unfocusedLabelColor = Color.LightGray,
+                    focusedTextColor = Color.White
                 ),
                 modifier = Modifier.fillMaxWidth()
             )
 
             Spacer(modifier = Modifier.height(24.dp))
 
-            // Login button
             Button(
                 onClick = {
                     viewModel.login(LogInRequest(username, password))
                 },
-                modifier = Modifier.fillMaxWidth().height(48.dp)
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(48.dp)
             ) {
                 if (uiState is UiState.Loading) {
                     CircularProgressIndicator(

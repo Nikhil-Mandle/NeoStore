@@ -105,11 +105,11 @@ fun ProductDetailScreen(
         onDismiss = {
             showQuantityDialog = false
         }
-    ) {
+    ) { qty ->
         cartViewModel.addToCart(
             accessToken = userViewModel.getAccessToken() ?: "",
             productId = productId,
-            quantity = 2
+            quantity = qty.toInt()
         )
     }
 

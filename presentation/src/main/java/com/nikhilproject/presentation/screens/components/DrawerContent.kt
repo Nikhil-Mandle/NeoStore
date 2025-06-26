@@ -69,16 +69,15 @@ fun DrawerContent(
 
         Spacer(Modifier.height(8.dp))
 
-        // Name and Email
         Text(
             text = userName,
-            style = MaterialTheme.typography.displayMedium,
+            style = MaterialTheme.typography.titleLarge,
             modifier = Modifier.align(Alignment.CenterHorizontally)
         )
 
         Text(
             text = userEmail,
-            style = MaterialTheme.typography.bodySmall,
+            style = MaterialTheme.typography.titleMedium,
             modifier = Modifier.align(Alignment.CenterHorizontally),
             color = Color.Gray
         )

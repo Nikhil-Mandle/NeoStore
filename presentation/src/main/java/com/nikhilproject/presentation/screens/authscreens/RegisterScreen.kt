@@ -1,5 +1,7 @@
 package com.nikhilproject.presentation.screens.authscreens
 
+import android.util.Patterns
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -11,6 +13,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Email
@@ -18,9 +22,9 @@ import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Phone
 import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.CheckboxDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
@@ -39,9 +43,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.withStyle
@@ -58,6 +64,7 @@ fun RegisterScreen(
     onSuccessNavigate: () -> Unit
 ) {
 
+    val context = LocalContext.current
     val uiState by viewModel.uiState.collectAsState()
 
     var firstName by remember { mutableStateOf("") }
@@ -75,7 +82,7 @@ fun RegisterScreen(
             Box(
                 modifier = Modifier
                     .fillMaxSize()
-                    .background(Color(0xFFDA1E37)) // Red background
+                    .background(Color(0xFFDA1E37))
             ) {
                 Column(
                     modifier = Modifier
@@ -124,7 +131,8 @@ fun RegisterScreen(
                         value = email,
                         onValueChange = { email = it },
                         label = "Email",
-                        icon = Icons.Default.Email
+                        icon = Icons.Default.Email,
+                        keyboardType = KeyboardType.Email
                     )
 
                     // Password
@@ -133,7 +141,8 @@ fun RegisterScreen(
                         onValueChange = { password = it },
                         label = "Password",
                         icon = Icons.Default.Lock,
-                        isPassword = true
+                        isPassword = true,
+                        keyboardType = KeyboardType.Password
                     )
 
                     // Confirm Password
@@ -142,7 +151,8 @@ fun RegisterScreen(
                         onValueChange = { confirmPassword = it },
                         label = "Confirm Password",
                         icon = Icons.Default.Lock,
-                        isPassword = true
+                        isPassword = true,
+                        keyboardType = KeyboardType.Password
                     )
 
                     Spacer(modifier = Modifier.height(8.dp))
@@ -162,7 +172,9 @@ fun RegisterScreen(
                                 colors = RadioButtonDefaults.colors(selectedColor = Color.White)
                             )
                             Text("Male", color = Color.White)
+
                             Spacer(modifier = Modifier.width(8.dp))
+
                             RadioButton(
                                 selected = gender == "Female",
                                 onClick = { gender = "Female" },
@@ -172,17 +184,20 @@ fun RegisterScreen(
                         }
                     }
 
-                    // Phone Number
                     CustomInputField(
                         value = phoneNumber,
-                        onValueChange = { phoneNumber = it },
+                        onValueChange = {
+                            if (it.length <= 10 && it.all { char -> char.isDigit() }) {
+                                phoneNumber = it
+                            }
+                        },
                         label = "Phone Number",
-                        icon = Icons.Default.Phone
+                        icon = Icons.Default.Phone,
+                        keyboardType = KeyboardType.Phone
                     )
 
                     Spacer(modifier = Modifier.height(8.dp))
 
-                    // Terms and Conditions Checkbox
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
                         modifier = Modifier.fillMaxWidth()
@@ -192,7 +207,8 @@ fun RegisterScreen(
                             onCheckedChange = { isTermsAccepted = it },
                             colors = CheckboxDefaults.colors(
                                 checkedColor = Color.White,
-                                uncheckedColor = Color.White
+                                checkmarkColor = Color(0xFF4CAF50),
+                                uncheckedColor = Color.Gray
                             )
                         )
                         Text(
@@ -216,20 +232,69 @@ fun RegisterScreen(
 
                     Button(
                         onClick = {
-                            val request = RegisterRequest(
-                                firstName = "mayur",
-                                lastName = "totre",
-                                email = "myname12@test.com",
-                                password = "qwerty12",
-                                confirmPassword = "qwerty12",
-                                gender = "M",
-                                phoneNo = 1234567890
-                            )
-                            viewModel.register(request)
-                        },
-                        colors = ButtonDefaults.buttonColors(
+                            when {
+                                firstName.isBlank() || lastName.isBlank() -> {
+                                    Toast.makeText(
+                                        context,
+                                        "Name fields cannot be empty",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                }
 
-                        ),
+                                !Patterns.EMAIL_ADDRESS.matcher(email).matches() -> {
+                                    Toast.makeText(
+                                        context,
+                                        "Invalid email address",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                }
+
+                                phoneNumber.length != 10 || !phoneNumber.all { it.isDigit() } -> {
+                                    Toast.makeText(
+                                        context,
+                                        "Phone number must be 10 digits",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                }
+
+                                password.length < 6 -> {
+                                    Toast.makeText(
+                                        context,
+                                        "Password must be at least 6 characters",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                }
+
+                                password != confirmPassword -> {
+                                    Toast.makeText(
+                                        context,
+                                        "Passwords do not match",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                }
+
+                                !isTermsAccepted -> {
+                                    Toast.makeText(
+                                        context,
+                                        "You must accept Terms & Conditions",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                }
+
+                                else -> {
+                                    val request = RegisterRequest(
+                                        firstName = firstName,
+                                        lastName = lastName,
+                                        email = email,
+                                        password = password,
+                                        confirmPassword = confirmPassword,
+                                        gender = gender,
+                                        phoneNo = phoneNumber.toLong()
+                                    )
+                                    viewModel.register(request)
+                                }
+                            }
+                        },
                         modifier = Modifier
                             .fillMaxWidth()
                             .height(48.dp)
@@ -241,12 +306,15 @@ fun RegisterScreen(
         }
 
         is UiState.Loading -> {
-            // Show loading indicator
+            Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                CircularProgressIndicator()
+            }
         }
 
         is UiState.Success -> {
+            Toast.makeText(context, "Registration Successful", Toast.LENGTH_SHORT).show()
             LaunchedEffect(Unit) {
-                onSuccessNavigate() // navigate to home
+                onSuccessNavigate()
             }
         }
 
@@ -263,7 +331,8 @@ fun CustomInputField(
     onValueChange: (String) -> Unit,
     label: String,
     icon: ImageVector,
-    isPassword: Boolean = false
+    isPassword: Boolean = false,
+    keyboardType: KeyboardType = KeyboardType.Text
 ) {
     OutlinedTextField(
         value = value,
@@ -272,15 +341,19 @@ fun CustomInputField(
         leadingIcon = { Icon(icon, contentDescription = null) },
         singleLine = true,
         visualTransformation = if (isPassword) PasswordVisualTransformation() else VisualTransformation.None,
+        keyboardOptions = KeyboardOptions(keyboardType = keyboardType),
+        keyboardActions = KeyboardActions.Default,
         colors = TextFieldDefaults.outlinedTextFieldColors(
             focusedBorderColor = Color.White,
             unfocusedBorderColor = Color.LightGray,
             cursorColor = Color.White,
             focusedLabelColor = Color.White,
-            unfocusedLabelColor = Color.LightGray
+            unfocusedLabelColor = Color.LightGray,
+            focusedTextColor = Color.White,
         ),
         modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = 4.dp)
     )
 }
+

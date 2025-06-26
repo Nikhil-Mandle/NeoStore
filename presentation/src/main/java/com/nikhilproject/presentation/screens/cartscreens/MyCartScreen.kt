@@ -32,6 +32,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -61,6 +62,7 @@ fun MyCartScreen(onOrderNowClicked: () -> Unit) {
     val accessToken = userViewModel.getAccessToken()
     val cartState by cartViewModel.cartListState.collectAsState()
     val deleteCartState by cartViewModel.deleteCartState.collectAsState()
+    val editCartState by cartViewModel.editCartState.collectAsState()
 
     var showLoading by remember { mutableStateOf(false) }
     var messageToShow by remember { mutableStateOf<String?>(null) }
@@ -76,12 +78,27 @@ fun MyCartScreen(onOrderNowClicked: () -> Unit) {
             is UiState.Success -> {
                 showLoading = false
                 messageToShow = state.data.message
-                cartViewModel.fetchCartItems(accessToken ?: "")
             }
 
             is UiState.Error -> {
                 showLoading = false
                 messageToShow = state.message
+            }
+
+            else -> Unit
+        }
+    }
+
+    LaunchedEffect(editCartState) {
+        when (val state = editCartState) {
+            is UiState.Loading -> showLoading = true
+
+            is UiState.Success -> {
+                showLoading = false
+            }
+
+            is UiState.Error -> {
+                showLoading = false
             }
 
             else -> Unit
@@ -112,7 +129,10 @@ fun MyCartScreen(onOrderNowClicked: () -> Unit) {
             ) {
                 LazyColumn(modifier = Modifier.weight(1f)) {
                     items(cartItems) { item ->
-                        CartItemRow(item) {
+                        CartItemRow(item,
+                            onEditCartQuantity = { productId, newQuantity ->
+                                cartViewModel.editCart(accessToken ?: "", productId, newQuantity)
+                            }) {
                             cartViewModel.deleteCartItem(
                                 accessToken = accessToken ?: "",
                                 productId = it
@@ -157,7 +177,11 @@ fun MyCartScreen(onOrderNowClicked: () -> Unit) {
 }
 
 @Composable
-fun CartItemRow(item: ProductItemData, onRemoveFromCartClicked: (Int) -> Unit) {
+fun CartItemRow(
+    item: ProductItemData,
+    onEditCartQuantity: (productId: Int, newQuantity: Int) -> Unit,
+    onRemoveFromCartClicked: (Int) -> Unit
+) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -176,8 +200,12 @@ fun CartItemRow(item: ProductItemData, onRemoveFromCartClicked: (Int) -> Unit) {
 
         Column(modifier = Modifier.weight(1f)) {
             Text(item.product.name, fontWeight = FontWeight.Bold)
+
             Text("(${item.product.product_category})", style = MaterialTheme.typography.bodySmall)
-            QuantitySelector(item.quantity)
+
+            QuantitySelector(item.quantity) { newQuantity ->
+                onEditCartQuantity(item.product.id, newQuantity)
+            }
         }
 
         Column(horizontalAlignment = Alignment.End) {
@@ -197,17 +225,33 @@ fun CartItemRow(item: ProductItemData, onRemoveFromCartClicked: (Int) -> Unit) {
 }
 
 @Composable
-fun QuantitySelector(selectedQuantity: Int) {
-    var quantity by remember { mutableStateOf(selectedQuantity) }
-    Row(
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        IconButton(onClick = { if (quantity > 1) quantity-- }) {
-            Icon(Icons.Default.KeyboardArrowDown, contentDescription = "Remove")
+fun QuantitySelector(
+    selectedQuantity: Int,
+    onQuantityChange: (Int) -> Unit
+) {
+    var quantity by remember { mutableIntStateOf(selectedQuantity) }
+
+    Row(verticalAlignment = Alignment.CenterVertically) {
+        IconButton(
+            onClick = {
+                if (quantity > 1) {
+                    quantity--
+                    onQuantityChange(quantity)
+                }
+            }
+        ) {
+            Icon(Icons.Default.KeyboardArrowDown, contentDescription = "Decrease")
         }
+
         Text(quantity.toString())
-        IconButton(onClick = { quantity++ }) {
-            Icon(Icons.Default.KeyboardArrowUp, contentDescription = "Add")
+
+        IconButton(
+            onClick = {
+                quantity++
+                onQuantityChange(quantity)
+            }
+        ) {
+            Icon(Icons.Default.KeyboardArrowUp, contentDescription = "Increase")
         }
     }
 }

@@ -53,7 +53,30 @@ class CartViewModel @Inject constructor(
             editCartUseCase(accessToken, productId, quantity)
         }.onSuccess { response ->
             _editCartState.value = UiState.Success(response)
-        }.onFailure { throwable ->
+
+            val currentCartState = _cartListState.value
+            if (currentCartState is UiState.Success) {
+                val updatedCartItems = currentCartState.data.data.map {
+                    if (it.product.id == productId) {
+                        val newSubtotal = it.product.cost * quantity
+                        it.copy(
+                            quantity = quantity,
+                            product = it.product.copy(sub_total = newSubtotal)
+                        )
+                    } else it
+                }
+
+                val newTotal = updatedCartItems.sumOf { it.product.sub_total }
+
+                val updatedCart = currentCartState.data.copy(
+                    data = updatedCartItems,
+                    total = newTotal
+                )
+
+                _cartListState.value = UiState.Success(updatedCart)
+            }
+        }
+            .onFailure { throwable ->
             _editCartState.value = UiState.Error(throwable.message ?: "Unknown error")
         }
     }
@@ -64,7 +87,24 @@ class CartViewModel @Inject constructor(
             deleteCartItemUseCase(accessToken, productId)
         }.onSuccess { response ->
             _deleteCartState.value = UiState.Success(response)
-        }.onFailure { throwable ->
+
+            val currentCartState = _cartListState.value
+            if (currentCartState is UiState.Success) {
+                val updatedCartItems = currentCartState.data.data.filterNot {
+                    it.product.id == productId
+                }
+
+                val newTotal = updatedCartItems.sumOf { it.product.sub_total }
+
+                val updatedCart = currentCartState.data.copy(
+                    data = updatedCartItems,
+                    total = newTotal
+                )
+
+                _cartListState.value = UiState.Success(updatedCart)
+            }
+        }
+            .onFailure { throwable ->
             _deleteCartState.value = UiState.Error(throwable.message ?: "Unknown error")
         }
     }
