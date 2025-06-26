@@ -9,10 +9,12 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import androidx.navigation.toRoute
+import com.nikhilproject.presentation.SharedPreferenceManager
 import com.nikhilproject.presentation.screens.AppSettingsScreen
 import com.nikhilproject.presentation.screens.HomeScreen
 import com.nikhilproject.presentation.screens.ProductDetailScreen
 import com.nikhilproject.presentation.screens.ProductListScreen
+import com.nikhilproject.presentation.screens.SplashScreen
 import com.nikhilproject.presentation.screens.StoreLocatorScreen
 import com.nikhilproject.presentation.screens.accountsscreen.EditProfileScreen
 import com.nikhilproject.presentation.screens.accountsscreen.MyAccountScreen
@@ -26,12 +28,21 @@ import com.nikhilproject.presentation.screens.orderscreens.MyOrdersList
 import com.nikhilproject.presentation.screens.orderscreens.OrderDetailsScreen
 
 @Composable
-fun AppNavHost(navController: NavHostController, modifier: Modifier) {
+fun AppNavHost(
+    navController: NavHostController,
+    sharedPref: SharedPreferenceManager,
+    modifier: Modifier
+) {
     NavHost(
         modifier = modifier,
         navController = navController,
-        startDestination = AuthGraph
+        startDestination = SplashScreenNav
     ) {
+
+        composable<SplashScreenNav> {
+            SplashScreen(navController, sharedPref)
+        }
+
         authGraph(navController)
         homeGraph(navController)
         productGraph(navController)
@@ -52,7 +63,6 @@ fun NavGraphBuilder.authGraph(navController: NavHostController) {
                 onSuccessNavigate = {
                     navController.navigate(HomeGraph) {
                         popUpTo(AuthGraph) { inclusive = true }
-                        launchSingleTop = true
                     }
                 }
             )
@@ -63,7 +73,6 @@ fun NavGraphBuilder.authGraph(navController: NavHostController) {
                 onLoginSuccess = {
                     navController.navigate(HomeGraph) {
                         popUpTo(AuthGraph) { inclusive = true }
-                        launchSingleTop = true
                     }
                 },
                 onDontHaveAnAccountClick = {
@@ -73,7 +82,6 @@ fun NavGraphBuilder.authGraph(navController: NavHostController) {
         }
     }
 }
-
 
 fun NavGraphBuilder.homeGraph(navController: NavHostController) {
     navigation<HomeGraph>(

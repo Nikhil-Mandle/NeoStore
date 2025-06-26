@@ -3,6 +3,9 @@ package com.nikhilproject.presentation.navigation
 import kotlinx.serialization.Serializable
 
 @Serializable
+data object SplashScreenNav
+
+@Serializable
 data object AuthGraph
 
 @Serializable

@@ -25,6 +25,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import coil.compose.rememberAsyncImagePainter
 import com.nikhilproject.presentation.R
+import com.nikhilproject.presentation.SharedPreferenceManager
 import com.nikhilproject.presentation.navigation.LoginScreen
 import com.nikhilproject.presentation.navigation.MyAccountScreen
 import com.nikhilproject.presentation.navigation.MyCartScreen
@@ -42,7 +43,8 @@ fun DrawerContent(
     userName: String,
     userEmail: String,
     profilePic: String,
-    cartCount: Int = 0
+    cartCount: Int = 0,
+    sharedPref: SharedPreferenceManager
 ) {
     Column(
         modifier = Modifier
@@ -128,10 +130,15 @@ fun DrawerContent(
 
         DrawerItem(icon = R.drawable.exit_to_app, label = "Logout") {
             scope.launch { drawerState.close() }
+            sharedPref.clearSession()
+
             navController.navigate(LoginScreen) {
-                navController.popBackStack()
+                popUpTo(0) { inclusive = true }
                 launchSingleTop = true
+                restoreState = false
             }
+
         }
+
     }
 }

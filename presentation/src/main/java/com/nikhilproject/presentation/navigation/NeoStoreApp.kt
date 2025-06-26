@@ -11,14 +11,18 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.nikhilproject.presentation.SharedPreferenceManager
 import com.nikhilproject.presentation.screens.components.DrawerContent
 import com.nikhilproject.presentation.viewmodel.UserViewModel
 
 @Composable
-fun NeoStoreApp() {
-    val navController = rememberNavController()
+fun NeoStoreApp(
+    navController: NavHostController,
+    sharedPref: SharedPreferenceManager
+) {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
@@ -45,7 +49,7 @@ fun NeoStoreApp() {
                 }
             }
         ) { innerPadding ->
-            AppNavHost(navController = navController, modifier = Modifier.padding(innerPadding))
+            AppNavHost(navController = navController, sharedPref = sharedPref, modifier = Modifier.padding(innerPadding))
         }
     }
 
@@ -60,6 +64,7 @@ fun NeoStoreApp() {
                         userName = userViewModel.getUserName() ?: "",
                         userEmail = userViewModel.getUserEmail() ?: "",
                         profilePic = userViewModel.getProfilePic() ?: "",
+                        sharedPref = sharedPref
                     )
                 }
             },
