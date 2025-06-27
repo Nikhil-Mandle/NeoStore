@@ -21,6 +21,9 @@ navigationCompose = "2.9.0"
 navigationComposeJvmstubs = "2.9.0"
 playServicesMaps = "19.2.0"
 turbine = "1.0.0"
+firebaseCrashlytics = "19.4.4"
+googleGmsGoogleServices = "4.4.3"
+googleFirebaseCrashlytics = "3.0.4"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -52,10 +55,13 @@ androidx-navigation-compose-jvmstubs = { group = "androidx.navigation", name = "
 mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
 play-services-maps = { module = "com.google.android.gms:play-services-maps", version.ref = "playServicesMaps" }
 turbine = { module = "app.cash.turbine:turbine", version.ref = "turbine" }
+firebase-crashlytics = { group = "com.google.firebase", name = "firebase-crashlytics", version.ref = "firebaseCrashlytics" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 android-library = { id = "com.android.library", version.ref = "agp" }
+google-gms-google-services = { id = "com.google.gms.google-services", version.ref = "googleGmsGoogleServices" }
+google-firebase-crashlytics = { id = "com.google.firebase.crashlytics", version.ref = "googleFirebaseCrashlytics" }
 

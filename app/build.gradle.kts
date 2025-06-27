@@ -6,6 +6,8 @@ plugins {
     id("kotlin-kapt")
 //    id("com.google.dagger.hilt.android")
     id("dagger.hilt.android.plugin")
+    alias(libs.plugins.google.gms.google.services)
+    alias(libs.plugins.google.firebase.crashlytics)
 }
 
 android {
@@ -62,6 +64,7 @@ dependencies {
     implementation(project(":presentation"))
     implementation(project(":domain"))
     implementation(project(":data"))
+    implementation(libs.firebase.crashlytics)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

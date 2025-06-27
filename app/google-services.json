@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "8702412925",
+    "project_id": "neostore-1c77f",
+    "storage_bucket": "neostore-1c77f.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:8702412925:android:564f1aa76f96e1b35c8914",
+        "android_client_info": {
+          "package_name": "com.nikhilproject.neostore"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCCvLyTWpVZm8G7K9K942dJKj1r3iW2q-Y"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

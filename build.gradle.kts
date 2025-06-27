@@ -8,4 +8,6 @@ plugins {
     id("org.jetbrains.kotlin.plugin.serialization") version "2.1.10"
     id("androidx.room") version "2.7.2" apply false
     id("com.google.devtools.ksp") version "2.1.10-1.0.31" apply false
+    alias(libs.plugins.google.gms.google.services) apply false
+    alias(libs.plugins.google.firebase.crashlytics) apply false
 }
