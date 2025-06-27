@@ -15,7 +15,6 @@ import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
-import androidx.navigation.compose.rememberNavController
 import com.nikhilproject.presentation.SharedPreferenceManager
 import com.nikhilproject.presentation.screens.components.DrawerContent
 import com.nikhilproject.presentation.viewmodel.UserViewModel
@@ -51,7 +50,11 @@ fun NeoStoreApp(
                 }
             }
         ) { innerPadding ->
-            AppNavHost(navController = navController, sharedPref = sharedPref, modifier = Modifier.padding(innerPadding))
+            AppNavHost(
+                navController = navController,
+                sharedPref = sharedPref,
+                modifier = Modifier.padding(innerPadding)
+            )
         }
     }
 

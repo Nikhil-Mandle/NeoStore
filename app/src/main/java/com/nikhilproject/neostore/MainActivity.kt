@@ -6,7 +6,6 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.compose.rememberNavController
-import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.nikhilproject.presentation.SharedPreferenceManager
 import com.nikhilproject.presentation.navigation.NeoStoreApp
 import dagger.hilt.android.AndroidEntryPoint
