@@ -344,6 +344,7 @@ fun CustomInputField(
             focusedLabelColor = Color.White,
             unfocusedLabelColor = Color.LightGray,
             focusedTextColor = Color.White,
+            unfocusedTextColor = Color.White
         ),
         modifier = Modifier
             .fillMaxWidth()

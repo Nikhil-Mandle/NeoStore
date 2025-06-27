@@ -97,7 +97,8 @@ fun LoginScreen(
                     cursorColor = Color.White,
                     focusedLabelColor = Color.White,
                     unfocusedLabelColor = Color.LightGray,
-                    focusedTextColor = Color.White
+                    focusedTextColor = Color.White,
+                    unfocusedTextColor = Color.White
                 ),
                 modifier = Modifier.fillMaxWidth()
             )
@@ -118,7 +119,8 @@ fun LoginScreen(
                     cursorColor = Color.White,
                     focusedLabelColor = Color.White,
                     unfocusedLabelColor = Color.LightGray,
-                    focusedTextColor = Color.White
+                    focusedTextColor = Color.White,
+                    unfocusedTextColor = Color.White
                 ),
                 modifier = Modifier.fillMaxWidth()
             )
