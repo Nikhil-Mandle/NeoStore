@@ -69,7 +69,7 @@ dependencies {
     implementation(libs.androidx.material3)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.androidx.espresso.core)
+    androidTestImplementation(libs.androidx.espresso.core) // Ui Testing
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
@@ -88,8 +88,14 @@ dependencies {
     implementation(libs.coil.compose)
 
     // Google Maps SDK for Android (required)
-    implementation("com.google.android.gms:play-services-maps:18.2.0")
+    implementation(libs.play.services.maps)
 
     // Jetpack Compose Maps integration (required for GoogleMap composable)
-    implementation("com.google.maps.android:maps-compose:2.11.4")
+    implementation(libs.maps.compose)
+
+    // Unit testing
+    testImplementation(libs.junit)
+    testImplementation(libs.kotlinx.coroutines.test) // Coroutines testing
+    testImplementation(libs.turbine) // For Flow/StateFlow testing
+    testImplementation(libs.mockk)   // For mocking dependencies
 }
