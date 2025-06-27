@@ -113,17 +113,20 @@ fun AddressListScreen(
     ) {
         Text(
             text = "Shipping Address",
-            style = MaterialTheme.typography.labelSmall,
+            style = MaterialTheme.typography.labelLarge,
             modifier = Modifier.padding(bottom = 16.dp)
         )
 
         if (addresses.isEmpty()) {
-            Text("No addresses found. Please add one.")
+            Text(
+                "No addresses found. Please add one.",
+                style = MaterialTheme.typography.labelMedium
+            )
         } else {
             LazyColumn(modifier = Modifier.weight(1f)) {
                 items(addresses) { address ->
                     AddressCard(
-                        name = "",
+                        name = userViewModel.getUserName() ?: "",
                         address = "${address.address}, ${address.city}, ${address.state}, ${address.zipCode}",
                         isSelected = selectedAddress.value == address,
                         onSelect = { selectedAddress.value = address },
@@ -144,12 +147,13 @@ fun AddressListScreen(
                             .show()
                     }
                 },
-                colors = ButtonDefaults.buttonColors(containerColor = Color.Red),
+                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFD32F2F)),
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(50.dp)
                     .padding(top = 16.dp)
-            ) {
+                    .height(50.dp),
+
+                ) {
                 Text("PLACE ORDER", color = Color.White)
             }
         }
@@ -165,7 +169,7 @@ fun AddressCard(
     onDelete: () -> Unit
 ) {
     Card(
-        elevation = CardDefaults.cardElevation(4.dp),
+        elevation = CardDefaults.cardElevation(1.dp),
         border = BorderStroke(1.dp, if (isSelected) Color.Red else Color.LightGray),
         modifier = Modifier.fillMaxWidth()
     ) {
@@ -207,5 +211,5 @@ fun AddressCard(
 @Preview
 @Composable
 private fun AddressListScreenPreview() {
-    AddressListScreen(){}
+    AddressListScreen() {}
 }

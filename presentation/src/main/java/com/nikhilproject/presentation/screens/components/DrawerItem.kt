@@ -55,7 +55,7 @@ fun DrawerItem(
                         Text(
                             text = it.toString(),
                             color = Color.White,
-                            fontSize = 10.sp
+                            fontSize = 12.sp
                         )
                     }
                 }

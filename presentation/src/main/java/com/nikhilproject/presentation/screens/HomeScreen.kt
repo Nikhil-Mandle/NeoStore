@@ -40,8 +40,8 @@ import com.nikhilproject.domain.model.ProductCategory
 import com.nikhilproject.presentation.R
 import com.nikhilproject.presentation.UiState
 import com.nikhilproject.presentation.screens.components.ImageSlider
-import com.nikhilproject.presentation.viewmodel.UserViewModel
 import com.nikhilproject.presentation.viewmodel.HomeScreenViewModel
+import com.nikhilproject.presentation.viewmodel.UserViewModel
 
 @Composable
 fun HomeScreen(
@@ -149,7 +149,7 @@ fun CategoryCard(category: Category, onClick: (Int) -> Unit) {
             Image(
                 painter = painterResource(category.image),
                 contentDescription = category.name,
-                modifier = Modifier.size(48.dp)
+                modifier = Modifier.size(80.dp)
             )
             Text(
                 text = category.name,

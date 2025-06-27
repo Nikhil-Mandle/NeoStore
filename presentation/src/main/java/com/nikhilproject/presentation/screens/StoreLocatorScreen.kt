@@ -54,8 +54,6 @@ fun StoreLocatorScreen(modifier: Modifier = Modifier) {
             }
         }
 
-
-        // List Section
         LazyColumn(modifier = Modifier.fillMaxSize()) {
             items(storeLocation) { store ->
                 StoreListItem(

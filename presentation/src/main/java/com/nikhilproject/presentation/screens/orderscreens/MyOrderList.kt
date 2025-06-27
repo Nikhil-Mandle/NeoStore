@@ -36,7 +36,7 @@ import com.nikhilproject.presentation.viewmodel.UserViewModel
 @Composable
 fun MyOrdersList(onItemClick: (Int) -> Unit) {
     val orderViewModel: OrderViewModel = hiltViewModel()
-    val authViewModel: UserViewModel = hiltViewModel() // Assuming this provides the token
+    val authViewModel: UserViewModel = hiltViewModel()
     val token = authViewModel.getAccessToken()
 
     val uiState by orderViewModel.allOrdersState.collectAsState()
@@ -91,7 +91,7 @@ fun MyOrdersList(onItemClick: (Int) -> Unit) {
         }
 
         UiState.Idle -> {
-            // Optionally trigger loading here
+
         }
     }
 }

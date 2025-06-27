@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -35,7 +36,11 @@ import com.nikhilproject.presentation.UiState
 
 
 @Composable
-fun ProductDetail(productState: UiState<ProductDetailsData>,showQuantityDialog: (Boolean) -> Unit, showRatingDialog: (Boolean) -> Unit) {
+fun ProductDetail(
+    productState: UiState<ProductDetailsData>,
+    showQuantityDialog: (Boolean) -> Unit,
+    showRatingDialog: (Boolean) -> Unit
+) {
     when (productState) {
         is UiState.Loading -> {
             Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
@@ -53,28 +58,41 @@ fun ProductDetail(productState: UiState<ProductDetailsData>,showQuantityDialog: 
                     .padding(16.dp)
             ) {
                 Text(text = product.name, fontSize = 20.sp, fontWeight = FontWeight.Bold)
+
                 Text(
                     text = "Category ID - ${product.product_category_id}",
                     fontSize = 14.sp,
                     color = Color.Gray
                 )
-                Text(
-                    text = product.producer,
-                    fontSize = 12.sp,
-                    color = Color.Gray,
-                    modifier = Modifier.padding(top = 4.dp)
-                )
 
                 Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier.padding(top = 4.dp)
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
-                    repeat(5) { index ->
-                        Icon(
-                            imageVector = Icons.Default.Star,
-                            contentDescription = null,
-                            tint = if (index < product.rating) Color(0xFFFFC107) else Color.LightGray
-                        )
+
+                    Text(
+                        text = product.producer,
+                        fontSize = 12.sp,
+                        color = Color.Gray,
+                        modifier = Modifier
+                            .padding(top = 4.dp)
+                            .weight(1f)
+                    )
+
+                    Spacer(modifier = Modifier.weight(1f))
+
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        modifier = Modifier
+                            .padding(top = 4.dp)
+                            .weight(1f)
+                    ) {
+                        repeat(5) { index ->
+                            Icon(
+                                imageVector = Icons.Default.Star,
+                                contentDescription = null,
+                                tint = if (index < product.rating) Color(0xFFFFC107) else Color.LightGray
+                            )
+                        }
                     }
                 }
 
@@ -86,7 +104,6 @@ fun ProductDetail(productState: UiState<ProductDetailsData>,showQuantityDialog: 
                     modifier = Modifier.padding(top = 8.dp)
                 )
 
-                // Show main image (first in list)
                 product.product_images.firstOrNull()?.let { mainImage ->
                     AsyncImage(
                         model = mainImage.image,
@@ -95,14 +112,13 @@ fun ProductDetail(productState: UiState<ProductDetailsData>,showQuantityDialog: 
                             .fillMaxWidth()
                             .height(200.dp)
                             .padding(vertical = 8.dp),
-                        contentScale = ContentScale.Crop
+                        contentScale = ContentScale.Fit
                     )
                 }
 
-                // Show thumbnails
                 Row(
                     modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween
+                    horizontalArrangement = Arrangement.SpaceEvenly
                 ) {
                     product.product_images.forEach { img ->
                         AsyncImage(
@@ -118,7 +134,7 @@ fun ProductDetail(productState: UiState<ProductDetailsData>,showQuantityDialog: 
                 Text(
                     text = "DESCRIPTION",
                     fontWeight = FontWeight.Bold,
-                    fontSize = 16.sp,
+                    fontSize = 18.sp,
                     modifier = Modifier.padding(top = 16.dp, bottom = 4.dp)
                 )
 
@@ -134,15 +150,21 @@ fun ProductDetail(productState: UiState<ProductDetailsData>,showQuantityDialog: 
                     horizontalArrangement = Arrangement.SpaceEvenly
                 ) {
                     Button(
+                        modifier = Modifier.fillMaxWidth()
+                            .weight(1f)
+                            .padding(end = 8.dp),
                         onClick = {
                             showQuantityDialog(true)
                         },
                         colors = ButtonDefaults.buttonColors(containerColor = Color.Red)
                     ) {
-                        Text("BUY NOW", color = Color.White)
+                        Text("ADD TO CART", color = Color.White)
                     }
 
                     OutlinedButton(
+                        modifier = Modifier.fillMaxWidth()
+                            .weight(1f)
+                            .padding(start = 8.dp),
                         onClick = {
                             showRatingDialog(true)
                         },
@@ -163,6 +185,6 @@ fun ProductDetail(productState: UiState<ProductDetailsData>,showQuantityDialog: 
             }
         }
 
-        UiState.Idle -> {} // Do nothing initially
+        UiState.Idle -> {}
     }
 }

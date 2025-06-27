@@ -36,11 +36,11 @@ fun SplashScreen(navController: NavHostController, sharedPref: SharedPreferenceM
         val token = sharedPref.getAccessToken()
         if (token.isNullOrEmpty()) {
             navController.navigate(LoginScreen) {
-                popUpTo(SplashScreenNav) { inclusive = true }  // remove SplashScreen from back stack
+                popUpTo(SplashScreenNav) { inclusive = true }
             }
         } else {
             navController.navigate(HomeGraph) {
-                popUpTo(SplashScreenNav) { inclusive = true }  // remove SplashScreen from back stack
+                popUpTo(SplashScreenNav) { inclusive = true }
             }
         }
     }

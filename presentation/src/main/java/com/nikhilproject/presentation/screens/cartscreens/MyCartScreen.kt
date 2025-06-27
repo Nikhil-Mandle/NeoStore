@@ -247,8 +247,10 @@ fun QuantitySelector(
 
         IconButton(
             onClick = {
-                quantity++
-                onQuantityChange(quantity)
+                if (quantity < 8) {
+                    quantity++
+                    onQuantityChange(quantity)
+                }
             }
         ) {
             Icon(Icons.Default.KeyboardArrowUp, contentDescription = "Increase")

@@ -32,7 +32,6 @@ class AddressViewModel @Inject constructor(
     private val _updateAddressState = MutableStateFlow<UiState<Unit>>(UiState.Idle)
     val updateAddressState = _updateAddressState.asStateFlow()
 
-    // Delete Address State
     private val _deleteAddressState = MutableStateFlow<UiState<String>>(UiState.Idle)
     val deleteAddressState = _deleteAddressState.asStateFlow()
 

@@ -47,7 +47,7 @@ fun ImageSlider(
             Box(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(4.dp) // Move padding here
+                    .padding(4.dp)
                     .clip(RoundedCornerShape(12.dp))
                     .background(Color.LightGray)
             ) {

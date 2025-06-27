@@ -110,7 +110,6 @@ fun RegisterScreen(
 
                     Spacer(modifier = Modifier.height(24.dp))
 
-                    // First Name
                     CustomInputField(
                         value = firstName,
                         onValueChange = { firstName = it },
@@ -118,7 +117,6 @@ fun RegisterScreen(
                         icon = Icons.Default.Person
                     )
 
-                    // Last Name
                     CustomInputField(
                         value = lastName,
                         onValueChange = { lastName = it },
@@ -126,7 +124,6 @@ fun RegisterScreen(
                         icon = Icons.Default.Person
                     )
 
-                    // Email
                     CustomInputField(
                         value = email,
                         onValueChange = { email = it },
@@ -135,7 +132,6 @@ fun RegisterScreen(
                         keyboardType = KeyboardType.Email
                     )
 
-                    // Password
                     CustomInputField(
                         value = password,
                         onValueChange = { password = it },
@@ -145,7 +141,6 @@ fun RegisterScreen(
                         keyboardType = KeyboardType.Password
                     )
 
-                    // Confirm Password
                     CustomInputField(
                         value = confirmPassword,
                         onValueChange = { confirmPassword = it },
@@ -157,7 +152,6 @@ fun RegisterScreen(
 
                     Spacer(modifier = Modifier.height(8.dp))
 
-                    // Gender
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
                         modifier = Modifier.fillMaxWidth()

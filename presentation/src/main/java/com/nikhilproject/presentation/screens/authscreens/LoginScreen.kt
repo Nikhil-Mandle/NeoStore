@@ -207,7 +207,6 @@ fun LoginScreen(
             }
         }
 
-        // Show error if any
         if (uiState is UiState.Error) {
             val error = (uiState as UiState.Error).message
             SnackbarHost(hostState = remember { SnackbarHostState() }) {

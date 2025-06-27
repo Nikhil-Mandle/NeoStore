@@ -67,7 +67,6 @@ fun ResetPasswordScreen() {
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // Password fields
         PasswordTextField(
             value = currentPassword,
             onValueChange = { currentPassword = it },
@@ -94,7 +93,6 @@ fun ResetPasswordScreen() {
 
         Spacer(modifier = Modifier.height(24.dp))
 
-        // Reset Password button
         Button(
             onClick = {
                 var isValid = true

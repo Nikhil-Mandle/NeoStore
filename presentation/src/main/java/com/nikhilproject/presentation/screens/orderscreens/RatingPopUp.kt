@@ -67,7 +67,6 @@ fun ProductRatingDialog(
                         modifier = Modifier.padding(bottom = 16.dp)
                     )
 
-                    // Optional product image
                     Image(
                         painter = painterResource(id = R.drawable.table),
                         contentDescription = "Product Image",
@@ -77,7 +76,6 @@ fun ProductRatingDialog(
                             .padding(bottom = 16.dp)
                     )
 
-                    // Rating Bar
                     Row(
                         horizontalArrangement = Arrangement.Center,
                         modifier = Modifier.padding(bottom = 16.dp)

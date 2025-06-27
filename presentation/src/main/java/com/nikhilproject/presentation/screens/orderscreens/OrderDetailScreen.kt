@@ -65,7 +65,7 @@ fun OrderDetailsScreen(id: Int) {
                     category = it.prod_cat_name,
                     qty = it.quantity,
                     amount = it.total.toDouble(),
-                    imageResId = it.prod_image // Replace with actual image loading if needed
+                    imageResId = it.prod_image
                 )
             }
             val totalAmount = data.cost

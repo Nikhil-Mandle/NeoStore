@@ -99,7 +99,7 @@ fun FurnitureListItem(item: ProductItem, onClick: (Int, String, String) -> Unit)
                 .size(80.dp)
                 .clip(RoundedCornerShape(4.dp))
                 .border(1.dp, Color.Gray),
-            contentScale = ContentScale.Crop
+            contentScale = ContentScale.Fit
         )
 
         Spacer(modifier = Modifier.width(8.dp))
@@ -115,21 +115,29 @@ fun FurnitureListItem(item: ProductItem, onClick: (Int, String, String) -> Unit)
                 style = MaterialTheme.typography.bodySmall,
                 color = Color.Gray
             )
-            Text(
-                text = "Rs. ${item.cost}",
-                color = Color.Red,
-                fontWeight = FontWeight.Bold,
-                fontSize = 18.sp
-            )
-            StarRating(rating = item.rating)
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Text(
+                    text = "Rs. ${item.cost}",
+                    color = Color.Red,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 24.sp,
+                    modifier = Modifier
+                        .weight(1f)
+                )
+                Spacer(modifier = Modifier.weight(1f))
+
+                StarRating(rating = item.rating, modifier = Modifier.weight(1f))
+            }
         }
     }
 }
 
 
 @Composable
-fun StarRating(rating: Int) {
-    Row(verticalAlignment = Alignment.CenterVertically) {
+fun StarRating(rating: Int, modifier: Modifier) {
+    Row(verticalAlignment = Alignment.CenterVertically, modifier = modifier) {
         repeat(5) { index ->
             val starColor = if (index < rating) Color(0xFFFFC107) else Color.LightGray
             Icon(
